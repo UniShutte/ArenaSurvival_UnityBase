@@ -1,0 +1,51 @@
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Mm]emory[Cc]aptures/
+
+# Отменяем игнорирование мета-файлов ассетов
+!/[Aa]ssets/**/*.meta
+
+# Сборки и пакеты (Игнорируем только временные файлы Visual Studio, но НЕ папку Packages в Unity)
+.vs/
+.gradle/
+**/[Bb]in/
+**/[Oo]bj/
+
+# Автогенерируемые файлы IDE
+*.csproj
+*.sln
+*.unityproj
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.opendb
+*.VC.db
+
+# Настройки VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/
+
+# Сборки (билды) самого проекта
+*.apk
+*.aab
+*.unitypackage
+*.exe
+*.app
+
+# ОС-специфичные файлы
+.DS_Store
+Thumbs.db
+Desktop.ini
