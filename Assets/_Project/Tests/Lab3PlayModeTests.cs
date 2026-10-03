@@ -83,6 +83,42 @@ namespace ArenaSurvival.Tests
         }
 
         [UnityTest]
+        public IEnumerator PlayerCanWalkTerrainRouteThroughNestedEntrance()
+        {
+            GameObject entrance = GameObject.Find("PF_ArenaEntrance");
+            Assert.That(entrance, Is.Not.Null);
+            Assert.That(entrance.transform.childCount, Is.EqualTo(3));
+            Assert.That(entrance.GetComponentsInChildren<BoxCollider>().Length, Is.EqualTo(3));
+            Vector3[] waypoints =
+            {
+                new Vector3(-29f, 0f, -48f),
+                new Vector3(-22f, 0f, -35f),
+                new Vector3(-16f, 0f, -24f),
+                new Vector3(-12f, 0f, -16f),
+                new Vector3(-12f, 0f, -9f),
+                new Vector3(-5f, 0f, -8f)
+            };
+            InputSystem.QueueStateEvent(keyboard, new KeyboardState(Key.W));
+            foreach (Vector3 waypoint in waypoints)
+            {
+                float deadline = Time.time + 12f;
+                Vector3 offset;
+                do
+                {
+                    offset = waypoint - player.transform.position;
+                    offset.y = 0;
+                    if (offset.sqrMagnitude < 1f)
+                        break;
+                    player.transform.rotation = Quaternion.LookRotation(offset);
+                    yield return null;
+                } while (Time.time < deadline);
+                Assert.That(offset.magnitude, Is.LessThan(1f), "Route blocked near " + waypoint);
+            }
+            InputSystem.QueueStateEvent(keyboard, new KeyboardState());
+            Assert.That(player.transform.position.y, Is.GreaterThan(0f));
+        }
+
+        [UnityTest]
         public IEnumerator TiltedSpawnPointStillCreatesUprightPlayer()
         {
             PlayerSpawner spawner = Object.FindFirstObjectByType<PlayerSpawner>();
