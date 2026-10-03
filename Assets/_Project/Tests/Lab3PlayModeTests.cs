@@ -83,6 +83,63 @@ namespace ArenaSurvival.Tests
         }
 
         [UnityTest]
+        public IEnumerator DynamicRocksFallTogetherAndCanBothBePushed()
+        {
+            string[] names = { "PF_LittleRock", "PF_LittleRock_03_GreenMoss" };
+            Rigidbody[] rocks = names.Select(name => GameObject.Find(name).GetComponent<Rigidbody>()).ToArray();
+            GameObject platform = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            platform.transform.position = new Vector3(0f, 99.5f, 0f);
+            platform.transform.localScale = new Vector3(30f, 1f, 30f);
+            try
+            {
+                for (int i = 0; i < rocks.Length; i++)
+                {
+                    Rigidbody rock = rocks[i];
+                    Assert.That(rock.gameObject.isStatic, Is.False, rock.name);
+                    Assert.That(rock.GetComponent<Renderer>().isPartOfStaticBatch, Is.False, rock.name);
+                    Assert.That(rock.isKinematic, Is.False);
+                    Assert.That(rock.useGravity, Is.True);
+                    rock.position = new Vector3(i == 0 ? -5f : 5f, 104f, 0f);
+                    rock.rotation = Quaternion.identity;
+                    rock.linearVelocity = Vector3.zero;
+                    rock.angularVelocity = Vector3.zero;
+                }
+                yield return new WaitForSeconds(0.6f);
+                foreach (Rigidbody rock in rocks)
+                {
+                    Assert.That(rock.position.y, Is.LessThan(103f), rock.name + " must fall.");
+                    Vector3 renderOrigin = rock.GetComponent<Renderer>().localToWorldMatrix.MultiplyPoint3x4(Vector3.zero);
+                    Assert.That(Vector3.Distance(renderOrigin, rock.transform.position), Is.LessThan(0.01f),
+                        rock.name + " renderer must follow its physical body.");
+                }
+                yield return new WaitForSeconds(1.5f);
+
+                CharacterController controller = player.GetComponent<CharacterController>();
+                foreach (Rigidbody rock in rocks)
+                {
+                    Bounds bounds = rock.GetComponent<Collider>().bounds;
+                    controller.enabled = false;
+                    player.transform.SetPositionAndRotation(
+                        new Vector3(bounds.center.x, 100.95f, bounds.min.z - 1.5f), Quaternion.identity);
+                    player.ResetVelocity();
+                    controller.enabled = true;
+                    yield return new WaitForSeconds(0.1f);
+                    Vector3 before = rock.position;
+                    InputSystem.QueueStateEvent(keyboard, new KeyboardState(Key.W));
+                    yield return new WaitForSeconds(1.2f);
+                    InputSystem.QueueStateEvent(keyboard, new KeyboardState());
+                    Vector3 displacement = Vector3.ProjectOnPlane(rock.position - before, Vector3.up);
+                    Assert.That(displacement.magnitude, Is.GreaterThan(0.05f), rock.name + " must respond to Player.");
+                    yield return null;
+                }
+            }
+            finally
+            {
+                Object.Destroy(platform);
+            }
+        }
+
+        [UnityTest]
         public IEnumerator PlayerCanWalkTerrainRouteThroughNestedEntrance()
         {
             GameObject entrance = GameObject.Find("PF_ArenaEntrance");
