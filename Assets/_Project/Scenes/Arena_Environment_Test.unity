@@ -305,7 +305,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 920d22ef9b4fbf1408a187429a5fae5c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ArenaSurvival.Spawning.PlayerSpawner
+  m_EditorClassIdentifier: ArenaSurvival.Core::ArenaSurvival.Spawning.PlayerSpawner
   playerPrefab: {fileID: 6245289102481349171, guid: cfe0114b7a8d72a489f3bfe740a34083, type: 3}
   spawnPoint: {fileID: 1250950199}
   projectilePool: {fileID: 1688480211}
@@ -752,13 +752,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1250950198}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.15893306, y: 0.24474965, z: 0.13313134, w: 0.94716096}
+  m_LocalRotation: {x: 0, y: 0.23278344, z: 0, w: 0.9725286}
   m_LocalPosition: {x: -38.88, y: 4.81, z: -67.81}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2115182017}
-  m_LocalEulerAnglesHint: {x: -21.484, y: 26.922, z: 10.802}
+  m_LocalEulerAnglesHint: {x: 0, y: 26.922, z: 0}
 --- !u!4 &1328691227 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8757035399727087576, guid: 0cde0e3fb1835b647b765fdb1989ad76, type: 3}
@@ -995,12 +995,12 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 09b01eaba02047a4f9c7e2cb72fcda70, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ArenaSurvival.Combat.ProjectilePool
+  m_EditorClassIdentifier: ArenaSurvival.Core::ArenaSurvival.Combat.ProjectilePool
   projectilePrefab: {fileID: 1003793675649823022, guid: c254890f3f804704587be3d6d8b4cd44, type: 3}
   projectileContainer: {fileID: 177407447}
   defaultCapacity: 20
   maximumSize: 100
-  logPoolOperations: 1
+  logPoolOperations: 0
 --- !u!1001 &1746243439
 PrefabInstance:
   m_ObjectHideFlags: 0

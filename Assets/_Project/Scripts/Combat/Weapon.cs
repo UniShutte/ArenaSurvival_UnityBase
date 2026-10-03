@@ -42,7 +42,11 @@ namespace ArenaSurvival.Combat
                 playerLook =
                     GetComponent<PlayerLook>();
             }
+        }
 
+        private void Start()
+        {
+            // PlayerSpawner assigns the scene pool after Instantiate and before Start.
             ValidateReferences();
         }
 

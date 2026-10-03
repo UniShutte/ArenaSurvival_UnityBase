@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3781153479543888395}
   - component: {fileID: 3821772178027370986}
   - component: {fileID: 383497523109403512}
+  - component: {fileID: 8710672428362192871}
   m_Layer: 6
   m_Name: PF_DamageableTarget
   m_TagString: Untagged
@@ -46,7 +47,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2df7f3974454a1f419c55b2865515e6e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ArenaSurvival.HealthSystem.Health
+  m_EditorClassIdentifier: ArenaSurvival.Core::ArenaSurvival.HealthSystem.Health
   maximumHealth: 100
 --- !u!114 &3821772178027370986
 MonoBehaviour:
@@ -59,7 +60,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 234c1b5e767cfe5419d26d89ac620104, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ArenaSurvival.Views.HealthDebugView
+  m_EditorClassIdentifier: ArenaSurvival.Core::ArenaSurvival.Views.HealthDebugView
   health: {fileID: 0}
 --- !u!114 &383497523109403512
 MonoBehaviour:
@@ -72,7 +73,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7b9fb35621c9c8140ba74a68856e3806, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TargetDeathHandler
+  m_EditorClassIdentifier: ArenaSurvival.Core::ArenaSurvival.HealthSystem.TargetDeathHandler
 --- !u!1 &5064967070279550120
 GameObject:
   m_ObjectHideFlags: 0
@@ -84,7 +85,6 @@ GameObject:
   - component: {fileID: 7721630764954795725}
   - component: {fileID: 1909852082236103333}
   - component: {fileID: 4165060621747005619}
-  - component: {fileID: 8710672428362192871}
   m_Layer: 6
   m_Name: Visual
   m_TagString: Untagged
@@ -170,7 +170,7 @@ SphereCollider:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5064967070279550120}
+  m_GameObject: {fileID: 1311180772323653609}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2

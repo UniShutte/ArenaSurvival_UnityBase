@@ -49,16 +49,6 @@ namespace ArenaSurvival.Views
                 HandleDied;
         }
 
-        private void Start()
-        {
-            if (health != null)
-            {
-                HandleHealthChanged(
-                    health.CurrentHealth,
-                    health.MaximumHealth);
-            }
-        }
-
         private void OnDisable()
         {
             if (health == null)

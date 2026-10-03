@@ -152,5 +152,5 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3534ef4ab76cab8418bfeb0a1c7ac94f, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ArenaSurvival.Combat.Projectile
+  m_EditorClassIdentifier: ArenaSurvival.Core::ArenaSurvival.Combat.Projectile
   maximumLifetime: 3

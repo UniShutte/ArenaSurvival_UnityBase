@@ -61,7 +61,7 @@ namespace ArenaSurvival.Spawning
             spawnedPlayer = Instantiate(
                 playerPrefab,
                 spawnPoint.position,
-                spawnPoint.rotation);
+                Quaternion.Euler(0f, spawnPoint.eulerAngles.y, 0f));
 
             spawnedPlayer.name =
                 playerPrefab.name;

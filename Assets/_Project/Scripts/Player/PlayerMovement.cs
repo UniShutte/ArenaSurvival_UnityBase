@@ -24,7 +24,7 @@ namespace ArenaSurvival.Player
 
         [Header("Vertical Movement")]
         [SerializeField, Min(0f)]
-        private float jumpHeight = 5f;
+        private float jumpHeight = 1.5f;
 
         [SerializeField]
         private float gravity = -20f;
@@ -77,6 +77,12 @@ namespace ArenaSurvival.Player
             // поэтому скорость умножается на Time.deltaTime.
             characterController.Move(
                 totalVelocity * Time.deltaTime);
+        }
+
+        public void ResetVelocity()
+        {
+            currentHorizontalSpeed = 0f;
+            verticalVelocity = 0f;
         }
 
         private void UpdateHorizontalSpeed(

@@ -4,6 +4,7 @@ namespace ArenaSurvival.Player
 {
     /// <summary> Возвращает Player в начальную позицию, если персонаж упал ниже заданной высоты. </summary>
     [RequireComponent(typeof(CharacterController))]
+    [RequireComponent(typeof(PlayerMovement))]
     public sealed class PlayerFallRespawner : MonoBehaviour
     {
         [Header("Respawn Settings")]
@@ -14,6 +15,7 @@ namespace ArenaSurvival.Player
         private float safeHeightOffset = 0.2f;
 
         private CharacterController characterController;
+        private PlayerMovement playerMovement;
 
         private Vector3 respawnPosition;
         private Quaternion respawnRotation;
@@ -22,6 +24,7 @@ namespace ArenaSurvival.Player
         {
             characterController =
                 GetComponent<CharacterController>();
+            playerMovement = GetComponent<PlayerMovement>();
         }
 
         private void Start()
@@ -53,6 +56,7 @@ namespace ArenaSurvival.Player
                 Vector3.up * safeHeightOffset,
                 respawnRotation);
 
+            playerMovement.ResetVelocity();
             characterController.enabled = true;
         }
     }
