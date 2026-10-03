@@ -3,6 +3,7 @@ using System.Linq;
 using ArenaSurvival.Combat;
 using ArenaSurvival.HealthSystem;
 using ArenaSurvival.Player;
+using ArenaSurvival.Spawning;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -17,26 +18,50 @@ namespace ArenaSurvival.Tests
         private PlayerMovement player;
         private ProjectilePool pool;
         private Keyboard keyboard;
+        private Mouse mouse;
+        private InputSettings originalInputSettings;
+        private InputSettings testInputSettings;
+        private HideFlags originalInputHideFlags;
+        private float originalCaptureDeltaTime;
 
         [UnitySetUp]
         public IEnumerator LoadArena()
         {
+            originalInputSettings = InputSystem.settings;
+            originalInputHideFlags = originalInputSettings.hideFlags;
+            // Input System destroys HideAndDontSave settings when replacing them.
+            originalInputSettings.hideFlags = HideFlags.DontUnloadUnusedAsset;
+            testInputSettings = Object.Instantiate(originalInputSettings);
+            InputSystem.settings = testInputSettings;
+            // Batch-mode tests have no focused Game View; do not change the project's input asset.
+            testInputSettings.backgroundBehavior = InputSettings.BackgroundBehavior.IgnoreFocus;
+            testInputSettings.editorInputBehaviorInPlayMode =
+                InputSettings.EditorInputBehaviorInPlayMode.AllDeviceInputAlwaysGoesToGameView;
+            originalCaptureDeltaTime = Time.captureDeltaTime;
+            Time.captureDeltaTime = 1f / 60f;
             yield return SceneManager.LoadSceneAsync("Arena_01");
             yield return null;
             player = Object.FindFirstObjectByType<PlayerMovement>();
             pool = Object.FindFirstObjectByType<ProjectilePool>();
             keyboard = InputSystem.AddDevice<Keyboard>();
+            mouse = InputSystem.AddDevice<Mouse>();
         }
 
         [TearDown]
-        public void RemoveKeyboard()
+        public void RemoveDevices()
         {
             if (keyboard != null)
                 InputSystem.RemoveDevice(keyboard);
+            if (mouse != null)
+                InputSystem.RemoveDevice(mouse);
+            InputSystem.settings = originalInputSettings;
+            originalInputSettings.hideFlags = originalInputHideFlags;
+            Object.Destroy(testInputSettings);
+            Time.captureDeltaTime = originalCaptureDeltaTime;
         }
 
-        [Test]
-        public void ArenaHasPlayerTerrainTargetsAndCollisionLayers()
+        [UnityTest]
+        public IEnumerator ArenaHasPlayerTerrainTargetsAndCollisionLayers()
         {
             Assert.That(player, Is.Not.Null);
             Assert.That(pool, Is.Not.Null);
@@ -54,6 +79,55 @@ namespace ArenaSurvival.Tests
             Assert.That(Physics.GetIgnoreLayerCollision(projectileLayer, LayerMask.NameToLayer("Player")), Is.True);
             Assert.That(Physics.GetIgnoreLayerCollision(projectileLayer, LayerMask.NameToLayer("Damageable")), Is.False);
             Assert.That(Physics.GetIgnoreLayerCollision(projectileLayer, LayerMask.NameToLayer("Environment")), Is.False);
+            yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator TiltedSpawnPointStillCreatesUprightPlayer()
+        {
+            PlayerSpawner spawner = Object.FindFirstObjectByType<PlayerSpawner>();
+            GameObject.Find("PlayerSpawnPoint").transform.rotation = Quaternion.Euler(23f, 55f, 11f);
+            player.gameObject.SetActive(false);
+            Object.Instantiate(spawner);
+            yield return null;
+            yield return null;
+
+            PlayerMovement spawned = Object.FindFirstObjectByType<PlayerMovement>();
+            Assert.That(spawned, Is.Not.Null);
+            Assert.That(spawned, Is.Not.SameAs(player));
+            Assert.That(Vector3.Dot(spawned.transform.up, Vector3.up), Is.GreaterThan(0.999f));
+            Assert.That(Mathf.DeltaAngle(spawned.transform.eulerAngles.y, 55f), Is.EqualTo(0f).Within(0.1f));
+        }
+
+        [UnityTest]
+        public IEnumerator MouseFiresWeaponAndSpaceJumps()
+        {
+            GameObject platform = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            platform.transform.position = new Vector3(0f, 100f, 0f);
+            platform.transform.localScale = new Vector3(10f, 1f, 10f);
+            CharacterController controller = player.GetComponent<CharacterController>();
+            controller.enabled = false;
+            player.transform.SetPositionAndRotation(new Vector3(0f, 101.4f, 0f), Quaternion.identity);
+            player.ResetVelocity();
+            controller.enabled = true;
+            Health target = Object.FindObjectsByType<Health>(FindObjectsSortMode.None)
+                .Single(item => item.MaximumHealth == 50);
+            target.transform.position = new Vector3(0f, 102f, 3f);
+            Physics.SyncTransforms();
+            yield return new WaitForSeconds(0.2f);
+
+            InputSystem.QueueStateEvent(mouse, new MouseState().WithButton(MouseButton.Left));
+            yield return new WaitForSeconds(0.3f);
+            Assert.That(target.CurrentHealth, Is.EqualTo(25), "Mouse -> Weapon -> Pool -> Projectile must deal damage.");
+            Assert.That(pool.TotalCreated, Is.EqualTo(1));
+            InputSystem.QueueStateEvent(mouse, new MouseState());
+
+            Assert.That(controller.isGrounded, Is.True);
+            float groundedY = player.transform.position.y;
+            InputSystem.QueueStateEvent(keyboard, new KeyboardState(Key.Space));
+            yield return new WaitForSeconds(0.15f);
+            Assert.That(player.transform.position.y, Is.GreaterThan(groundedY + 0.5f));
+            Object.Destroy(platform);
         }
 
         [UnityTest]
