@@ -1,0 +1,10 @@
+{
+    "name": "ArenaSurvival.Lab4",
+    "rootNamespace": "ArenaSurvival.Lab4",
+    "references": [
+        "ArenaSurvival.Core",
+        "Cinemachine",
+        "Unity.TextMeshPro",
+        "Unity.ugui"
+    ]
+}
