@@ -2,8 +2,10 @@ using System.Collections;
 using System.Linq;
 using ArenaSurvival.Combat;
 using ArenaSurvival.HealthSystem;
+using ArenaSurvival.Lab4;
 using ArenaSurvival.Player;
 using ArenaSurvival.Spawning;
+using Cinemachine;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -41,6 +43,8 @@ namespace ArenaSurvival.Tests
             Time.captureDeltaTime = 1f / 60f;
             yield return SceneManager.LoadSceneAsync("Arena_01");
             yield return null;
+            // These tests isolate the original gameplay; Lab4 scene tests cover round completion.
+            Object.FindFirstObjectByType<ArenaSession>().enabled = false;
             player = Object.FindFirstObjectByType<PlayerMovement>();
             pool = Object.FindFirstObjectByType<ProjectilePool>();
             keyboard = InputSystem.AddDevice<Keyboard>();
@@ -67,7 +71,11 @@ namespace ArenaSurvival.Tests
             Assert.That(pool, Is.Not.Null);
             Assert.That(Vector3.Dot(player.transform.up, Vector3.up), Is.GreaterThan(0.999f));
             Assert.That(Object.FindObjectsByType<Camera>(FindObjectsSortMode.None).Length, Is.EqualTo(1));
-            Assert.That(player.GetComponentInChildren<Camera>().transform.localPosition.y, Is.EqualTo(0.7f));
+            Assert.That(player.GetComponentInChildren<Camera>(), Is.Null);
+            Assert.That(Camera.main.GetComponent<CinemachineBrain>(), Is.Not.Null);
+            Transform cameraTarget = player.transform.Find("CameraTarget");
+            Assert.That(cameraTarget.localPosition.y, Is.EqualTo(0.7f));
+            Assert.That(Object.FindFirstObjectByType<CinemachineVirtualCamera>().Follow, Is.SameAs(cameraTarget));
             Assert.That(Terrain.activeTerrain.terrainData.terrainLayers.Length, Is.GreaterThanOrEqualTo(3));
 
             Health[] targets = Object.FindObjectsByType<Health>(FindObjectsSortMode.None);
@@ -190,6 +198,8 @@ namespace ArenaSurvival.Tests
             Assert.That(spawned, Is.Not.SameAs(player));
             Assert.That(Vector3.Dot(spawned.transform.up, Vector3.up), Is.GreaterThan(0.999f));
             Assert.That(Mathf.DeltaAngle(spawned.transform.eulerAngles.y, 55f), Is.EqualTo(0f).Within(0.1f));
+            Assert.That(Object.FindFirstObjectByType<CinemachineVirtualCamera>().Follow,
+                Is.SameAs(spawned.transform.Find("CameraTarget")));
         }
 
         [UnityTest]

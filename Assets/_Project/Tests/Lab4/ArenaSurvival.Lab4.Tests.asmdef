@@ -1,0 +1,14 @@
+{
+    "name": "ArenaSurvival.Lab4.Tests",
+    "references": [
+        "ArenaSurvival.Lab4",
+        "ArenaSurvival.Core",
+        "Cinemachine",
+        "Unity.TextMeshPro",
+        "Unity.ugui",
+        "Unity.InputSystem",
+        "Unity.RenderPipelines.Core.Runtime",
+        "Unity.RenderPipelines.Universal.Runtime"
+    ],
+    "optionalUnityReferences": ["TestAssemblies"]
+}

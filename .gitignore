@@ -7,6 +7,10 @@
 /[Uu]ser[Ss]ettings/
 /[Mm]emory[Cc]aptures/
 
+# Local teaching materials and maintenance tools
+/Documentation/
+/Tools/
+
 # Отменяем игнорирование мета-файлов ассетов
 !/[Aa]ssets/**/*.meta
 
