@@ -5,7 +5,10 @@
         "ArenaSurvival.Core",
         "Cinemachine",
         "Unity.TextMeshPro",
-        "Unity.ugui"
+        "Unity.ugui",
+        "Unity.InputSystem",
+        "Unity.RenderPipelines.Core.Runtime",
+        "Unity.RenderPipelines.Universal.Runtime"
     ],
     "optionalUnityReferences": ["TestAssemblies"]
 }

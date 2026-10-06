@@ -2,6 +2,8 @@
     "name": "ArenaSurvival.PlayModeTests",
     "references": [
         "ArenaSurvival.Core",
+        "ArenaSurvival.Lab4",
+        "Cinemachine",
         "Unity.InputSystem"
     ],
     "optionalUnityReferences": [
