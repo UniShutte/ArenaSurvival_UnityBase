@@ -11,7 +11,7 @@ namespace ArenaSurvival.Combat
     /// он возвращается в Object Pool.
     /// </summary>
     [RequireComponent(typeof(Rigidbody))]
-    [RequireComponent(typeof(Collider))]
+    [RequireComponent(typeof(SphereCollider))]
     public sealed class Projectile :
         MonoBehaviour
     {
@@ -20,6 +20,8 @@ namespace ArenaSurvival.Combat
         private float maximumLifetime = 3f;
 
         private Rigidbody body;
+        private SphereCollider sphere;
+        private int collisionMask;
         private IObjectPool<Projectile> ownerPool;
 
         private float remainingLifetime;
@@ -30,6 +32,10 @@ namespace ArenaSurvival.Combat
         {
             body =
                 GetComponent<Rigidbody>();
+            sphere = GetComponent<SphereCollider>();
+            for (int layer = 0; layer < 32; layer++)
+                if (!Physics.GetIgnoreLayerCollision(gameObject.layer, layer))
+                    collisionMask |= 1 << layer;
         }
 
         /// <summary>
@@ -83,10 +89,24 @@ namespace ArenaSurvival.Combat
             }
         }
 
+        private void FixedUpdate()
+        {
+            if (isReleased) return;
+            Vector3 step = body.linearVelocity * Time.fixedDeltaTime;
+            if (step.sqrMagnitude == 0f) return;
+            Vector3 scale = transform.lossyScale;
+            float radius = sphere.radius * Mathf.Max(Mathf.Abs(scale.x), Mathf.Abs(scale.y), Mathf.Abs(scale.z));
+            Vector3 center = body.position + body.rotation * Vector3.Scale(sphere.center, scale);
+            // Trigger contacts alone can miss thin obstacles between physics steps.
+            if (Physics.SphereCast(center, radius, step.normalized,
+                    out RaycastHit hit, step.magnitude, collisionMask, QueryTriggerInteraction.Ignore))
+                OnTriggerEnter(hit.collider);
+        }
+
         private void OnTriggerEnter(
             Collider other)
         {
-            if (isReleased)
+            if (isReleased || other.isTrigger)
             {
                 return;
             }

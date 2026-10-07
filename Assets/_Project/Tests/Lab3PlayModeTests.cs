@@ -215,6 +215,7 @@ namespace ArenaSurvival.Tests
             controller.enabled = true;
             Health target = Object.FindObjectsByType<Health>(FindObjectsSortMode.None)
                 .Single(item => item.MaximumHealth == 50);
+            target.GetComponent<Rigidbody>().isKinematic = true;
             target.transform.position = new Vector3(0f, 102f, 3f);
             Physics.SyncTransforms();
             yield return new WaitForSeconds(0.2f);
@@ -231,6 +232,26 @@ namespace ArenaSurvival.Tests
             yield return new WaitForSeconds(0.15f);
             Assert.That(player.transform.position.y, Is.GreaterThan(groundedY + 0.5f));
             Object.Destroy(platform);
+        }
+
+        [UnityTest]
+        public IEnumerator LookingAndShootingInSameFrameUsesUpdatedCamera()
+        {
+            player.enabled = false;
+            player.GetComponent<CharacterController>().enabled = false;
+            player.transform.SetPositionAndRotation(new Vector3(0, 100, 0), Quaternion.identity);
+            player.transform.Find("CameraTarget").localRotation = Quaternion.identity;
+            Health target = Object.FindObjectsByType<Health>(FindObjectsSortMode.None)
+                .Single(item => item.MaximumHealth == 50);
+            target.GetComponent<Rigidbody>().isKinematic = true;
+            target.transform.position = new Vector3(0, 100.7f, 0) +
+                Quaternion.Euler(8, 20, 0) * Vector3.forward * 5;
+            Physics.SyncTransforms();
+            yield return null;
+            InputSystem.QueueStateEvent(mouse,
+                new MouseState { delta = new Vector2(250, -100) }.WithButton(MouseButton.Left));
+            yield return new WaitForSeconds(0.5f);
+            Assert.That(target.CurrentHealth, Is.EqualTo(25), "Aim must use this frame's yaw and pitch, not the previous camera pose.");
         }
 
         [UnityTest]

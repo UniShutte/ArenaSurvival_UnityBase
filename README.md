@@ -16,7 +16,7 @@
 2. В Unity Hub нажмите **Add project from disk** и выберите папку с `Assets`,
    `Packages` и `ProjectSettings`.
 3. Откройте проект в Unity **6000.3.24f1**. Дождитесь загрузки пакетов и импорта ресурсов.
-4. Откройте сцену `Assets/_Project/Scenes/Arena_01.unity`.
+4. Откройте сцену `Assets/_Project/Scenes/Arena_02.unity`.
 5. Нажмите **Play** и щёлкните по Game View для захвата курсора.
 
 ## Управление

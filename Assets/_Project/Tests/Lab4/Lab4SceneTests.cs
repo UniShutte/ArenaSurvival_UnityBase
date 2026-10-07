@@ -35,7 +35,7 @@ namespace ArenaSurvival.Lab4.Tests
         {
             previousCaptureDelta = Time.captureDeltaTime;
             Time.captureDeltaTime = 1f / 60;
-            yield return SceneManager.LoadSceneAsync("Arena_01");
+            yield return SceneManager.LoadSceneAsync("Arena_02");
             yield return null;
             yield return null;
             session = Object.FindFirstObjectByType<ArenaSession>();
@@ -69,7 +69,12 @@ namespace ArenaSurvival.Lab4.Tests
             Transform follow = Object.FindFirstObjectByType<CinemachineVirtualCamera>().Follow;
             Assert.That(Vector3.Distance(Camera.main.transform.position, follow.position), Is.LessThan(0.001f));
             Assert.That(Quaternion.Angle(Camera.main.transform.rotation, follow.rotation), Is.LessThan(0.01f));
-            Assert.That(follow.Find("FirePoint").localPosition, Is.EqualTo(new Vector3(0, 0, 0.5f)));
+            Assert.That(follow.Find("FirePoint").localPosition.x, Is.GreaterThan(0), "Keep the right-hand muzzle offset.");
+            Image crosshair = hud.transform.Find("Crosshair").GetComponent<Image>();
+            Assert.That(crosshair, Is.Not.Null);
+            Assert.That(crosshair.sprite, Is.Not.Null);
+            Assert.That(crosshair.raycastTarget, Is.False);
+            Assert.That(crosshair.rectTransform.anchoredPosition, Is.EqualTo(Vector2.zero));
             Assert.That(Field<TMP_Text>(hud, "progressText").text, Is.EqualTo("Targets: 0 / 4"));
             Assert.That(restart.gameObject.activeSelf, Is.False);
             Assert.That(animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"), Is.True);
