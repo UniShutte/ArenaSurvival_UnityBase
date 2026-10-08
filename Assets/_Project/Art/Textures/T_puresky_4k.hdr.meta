@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: f784370d14550b34bac12b8b98376375
+guid: e6e9af000d5a22847801da7a3244d335
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -125,10 +125,3 @@ TextureImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 282525
-  packageName: Black Walnut Tree
-  packageVersion: 1.0
-  assetPath: Assets/Gwangju_3D asset/kloppenheim_06_puresky_4k.hdr
-  uploadId: 657576
