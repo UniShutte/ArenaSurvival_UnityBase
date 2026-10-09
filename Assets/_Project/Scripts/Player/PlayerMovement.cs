@@ -32,11 +32,20 @@ namespace ArenaSurvival.Player
         [SerializeField]
         private float groundedVerticalVelocity = -2f;
 
+        [SerializeField, Min(0f)] private float groundProbeDistance = 0.12f;
+        [SerializeField, Min(0f)] private float coyoteTime = 0.1f;
+        [SerializeField, Min(0f)] private float jumpBufferTime = 0.12f;
+
         private CharacterController characterController;
         private PlayerInputReader inputReader;
 
         private float currentHorizontalSpeed;
         private float verticalVelocity;
+        private Vector3 horizontalVelocity;
+        private float lastGroundedTime = float.NegativeInfinity;
+        private float lastJumpPressedTime = float.NegativeInfinity;
+        private float groundedStepOffset;
+        private int groundMask;
 
         /// <summary>
         /// Текущая горизонтальная скорость нужна,
@@ -52,22 +61,32 @@ namespace ArenaSurvival.Player
 
             inputReader =
                 GetComponent<PlayerInputReader>();
+            groundedStepOffset = characterController.stepOffset;
+            groundMask = Physics.DefaultRaycastLayers & ~LayerMask.GetMask("Player", "Projectile", "UI", "Damageable");
         }
 
         private void Update()
         {
-            Vector2 movementInput =
-                inputReader.ReadMovement();
-
-            UpdateHorizontalSpeed(movementInput);
-            UpdateVerticalVelocity();
-
-            Vector3 horizontalDirection =
-                transform.right * movementInput.x +
-                transform.forward * movementInput.y;
-
-            Vector3 horizontalVelocity =
-                horizontalDirection * currentHorizontalSpeed;
+            if (inputReader.WasJumpPressed()) lastJumpPressedTime = Time.time;
+            bool grounded = verticalVelocity <= 0f && ProbeGround();
+            if (grounded)
+            {
+                lastGroundedTime = Time.time;
+                verticalVelocity = groundedVerticalVelocity;
+                Vector2 movementInput = inputReader.ReadMovement();
+                UpdateHorizontalSpeed(movementInput);
+                // Keep this world-space velocity unchanged until landing, even when looking around.
+                horizontalVelocity = (transform.right * movementInput.x + transform.forward * movementInput.y)
+                    * currentHorizontalSpeed;
+            }
+            if (Time.time - lastGroundedTime <= coyoteTime && Time.time - lastJumpPressedTime <= jumpBufferTime)
+            {
+                verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
+                lastGroundedTime = lastJumpPressedTime = float.NegativeInfinity;
+                grounded = false;
+            }
+            characterController.stepOffset = grounded ? groundedStepOffset : 0f;
+            verticalVelocity += gravity * Time.deltaTime;
 
             Vector3 totalVelocity =
                 horizontalVelocity +
@@ -75,14 +94,17 @@ namespace ArenaSurvival.Player
 
             // Move ожидает перемещение за текущий кадр,
             // поэтому скорость умножается на Time.deltaTime.
-            characterController.Move(
+            CollisionFlags flags = characterController.Move(
                 totalVelocity * Time.deltaTime);
+            if ((flags & CollisionFlags.Above) != 0 && verticalVelocity > 0f) verticalVelocity = 0f;
         }
 
         public void ResetVelocity()
         {
             currentHorizontalSpeed = 0f;
             verticalVelocity = 0f;
+            horizontalVelocity = Vector3.zero;
+            lastGroundedTime = lastJumpPressedTime = float.NegativeInfinity;
         }
 
         private void UpdateHorizontalSpeed(
@@ -107,31 +129,14 @@ namespace ArenaSurvival.Player
                 acceleration * Time.deltaTime);
         }
 
-        private void UpdateVerticalVelocity()
+        private bool ProbeGround()
         {
-            bool isGrounded =
-                characterController.isGrounded;
-
-            if (isGrounded && verticalVelocity < 0f)
-            {
-                // Небольшая отрицательная скорость помогает
-                // CharacterController сохранять контакт с полом.
-                verticalVelocity =
-                    groundedVerticalVelocity;
-            }
-
-            if (isGrounded &&
-                inputReader.WasJumpPressed())
-            {
-                // Формула получает стартовую скорость,
-                // необходимую для прыжка на заданную высоту.
-                verticalVelocity = Mathf.Sqrt(
-                    jumpHeight * -2f * gravity);
-            }
-
-            // CharacterController не применяет гравитацию сам.
-            verticalVelocity +=
-                gravity * Time.deltaTime;
+            float radius = characterController.radius * 0.9f;
+            Vector3 foot = transform.TransformPoint(characterController.center)
+                - Vector3.up * (characterController.height * 0.5f);
+            return Physics.SphereCast(foot + Vector3.up * (radius + 0.05f), radius, Vector3.down,
+                out RaycastHit hit, groundProbeDistance + 0.05f, groundMask, QueryTriggerInteraction.Ignore)
+                && Vector3.Angle(hit.normal, Vector3.up) <= characterController.slopeLimit;
         }
     }
 }

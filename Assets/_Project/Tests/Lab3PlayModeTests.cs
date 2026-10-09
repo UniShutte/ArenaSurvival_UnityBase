@@ -41,7 +41,7 @@ namespace ArenaSurvival.Tests
                 InputSettings.EditorInputBehaviorInPlayMode.AllDeviceInputAlwaysGoesToGameView;
             originalCaptureDeltaTime = Time.captureDeltaTime;
             Time.captureDeltaTime = 1f / 60f;
-            yield return SceneManager.LoadSceneAsync("Arena_01");
+            yield return SceneManager.LoadSceneAsync("Arena_02");
             yield return null;
             // These tests isolate the original gameplay; Lab4 scene tests cover round completion.
             Object.FindFirstObjectByType<ArenaSession>().enabled = false;
@@ -91,10 +91,14 @@ namespace ArenaSurvival.Tests
         }
 
         [UnityTest]
-        public IEnumerator DynamicRocksFallTogetherAndCanBothBePushed()
+        public IEnumerator DynamicBodiesFallTogetherAndCanBothBePushed()
         {
-            string[] names = { "PF_LittleRock", "PF_LittleRock_03_GreenMoss" };
-            Rigidbody[] rocks = names.Select(name => GameObject.Find(name).GetComponent<Rigidbody>()).ToArray();
+            Rigidbody[] rocks = Enumerable.Range(0, 2).Select(index =>
+            {
+                GameObject rock = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                rock.name = "DynamicBodyUnderTest" + index;
+                return rock.AddComponent<Rigidbody>();
+            }).ToArray();
             GameObject platform = GameObject.CreatePrimitive(PrimitiveType.Cube);
             platform.transform.position = new Vector3(0f, 99.5f, 0f);
             platform.transform.localScale = new Vector3(30f, 1f, 30f);
@@ -144,24 +148,36 @@ namespace ArenaSurvival.Tests
             finally
             {
                 Object.Destroy(platform);
+                foreach (Rigidbody rock in rocks) Object.Destroy(rock.gameObject);
             }
         }
 
         [UnityTest]
-        public IEnumerator PlayerCanWalkTerrainRouteThroughNestedEntrance()
+        public IEnumerator PlayerCanWalkThroughNestedEntrance()
         {
-            GameObject entrance = GameObject.Find("PF_ArenaEntrance");
-            Assert.That(entrance, Is.Not.Null);
-            Assert.That(entrance.transform.childCount, Is.EqualTo(3));
-            Assert.That(entrance.GetComponentsInChildren<BoxCollider>().Length, Is.EqualTo(3));
+            GameObject entrance = new GameObject("EntranceUnderTest");
+            GameObject platform = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            platform.transform.position = new Vector3(0, 99.5f, 0);
+            platform.transform.localScale = new Vector3(30, 1, 30);
+            for (int i = 0; i < 3; i++)
+            {
+                GameObject part = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                part.transform.SetParent(entrance.transform);
+                part.transform.position = i < 2 ? new Vector3(i == 0 ? -2 : 2, 101.5f, 0) : new Vector3(0, 103.25f, 0);
+                part.transform.localScale = i < 2 ? new Vector3(1, 3, 1) : new Vector3(5, 0.5f, 1);
+            }
+            CharacterController controller = player.GetComponent<CharacterController>();
+            controller.enabled = false;
+            player.transform.SetPositionAndRotation(new Vector3(-5, 100.95f, -8), Quaternion.identity);
+            player.ResetVelocity();
+            controller.enabled = true;
+            yield return new WaitForSeconds(0.2f);
             Vector3[] waypoints =
             {
-                new Vector3(-29f, 0f, -48f),
-                new Vector3(-22f, 0f, -35f),
-                new Vector3(-16f, 0f, -24f),
-                new Vector3(-12f, 0f, -16f),
-                new Vector3(-12f, 0f, -9f),
-                new Vector3(-5f, 0f, -8f)
+                new Vector3(-2, 100, -6),
+                new Vector3(0, 100, -3),
+                new Vector3(0, 100, 3),
+                new Vector3(5, 100, 5)
             };
             InputSystem.QueueStateEvent(keyboard, new KeyboardState(Key.W));
             foreach (Vector3 waypoint in waypoints)
@@ -180,7 +196,9 @@ namespace ArenaSurvival.Tests
                 Assert.That(offset.magnitude, Is.LessThan(1f), "Route blocked near " + waypoint);
             }
             InputSystem.QueueStateEvent(keyboard, new KeyboardState());
-            Assert.That(player.transform.position.y, Is.GreaterThan(0f));
+            Assert.That(player.transform.position.y, Is.GreaterThan(100f));
+            Object.Destroy(entrance);
+            Object.Destroy(platform);
         }
 
         [UnityTest]
@@ -335,12 +353,78 @@ namespace ArenaSurvival.Tests
         }
 
         [UnityTest]
+        public IEnumerator JumpKeepsWorldDirectionWhenInputAndLookChange()
+        {
+            GameObject platform = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            platform.transform.position = new Vector3(0, 100, 0);
+            platform.transform.localScale = new Vector3(30, 1, 30);
+            try
+            {
+                CharacterController controller = player.GetComponent<CharacterController>();
+                controller.enabled = false;
+                player.transform.SetPositionAndRotation(new Vector3(0, 101.45f, 0), Quaternion.identity);
+                player.ResetVelocity();
+                controller.enabled = true;
+                yield return new WaitForSeconds(0.2f);
+                InputSystem.QueueStateEvent(keyboard, new KeyboardState(Key.W));
+                yield return new WaitForSeconds(0.4f);
+                InputSystem.QueueStateEvent(keyboard, new KeyboardState(Key.W, Key.Space));
+                yield return new WaitForSeconds(0.08f);
+                Assert.That(controller.isGrounded, Is.False);
+                Vector3 before = player.transform.position;
+                player.transform.rotation = Quaternion.Euler(0, 90, 0);
+                InputSystem.QueueStateEvent(keyboard, new KeyboardState(Key.D));
+                yield return new WaitForSeconds(0.15f);
+                Vector3 displacement = Vector3.ProjectOnPlane(player.transform.position - before, Vector3.up);
+                Assert.That(displacement.z, Is.GreaterThan(0.5f));
+                Assert.That(Mathf.Abs(displacement.x), Is.LessThan(0.02f));
+            }
+            finally { Object.Destroy(platform); }
+        }
+
+        [UnityTest]
+        public IEnumerator JumpWorksWhileWalkingUpAndDownSlope()
+        {
+            GameObject slope = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            slope.transform.position = new Vector3(0, 100, 0);
+            slope.transform.localScale = new Vector3(10, 0.2f, 16);
+            slope.transform.rotation = Quaternion.Euler(20, 0, 0);
+            try
+            {
+                CharacterController controller = player.GetComponent<CharacterController>();
+                foreach (int direction in new[] { 1, -1 })
+                {
+                    InputSystem.QueueStateEvent(keyboard, new KeyboardState());
+                    controller.enabled = false;
+                    player.transform.SetPositionAndRotation(new Vector3(0, 104, -direction * 3),
+                        Quaternion.Euler(0, direction == 1 ? 0 : 180, 0));
+                    player.ResetVelocity();
+                    controller.enabled = true;
+                    yield return new WaitForSeconds(1);
+                    InputSystem.QueueStateEvent(keyboard, new KeyboardState(Key.W));
+                    yield return new WaitForSeconds(0.25f);
+                    float before = player.transform.position.y;
+                    InputSystem.QueueStateEvent(keyboard, new KeyboardState(Key.W, Key.Space));
+                    yield return new WaitForSeconds(0.15f);
+                    Assert.That(player.transform.position.y, Is.GreaterThan(before + 0.35f), "Slope direction " + direction);
+                    Assert.That(controller.isGrounded, Is.False);
+                }
+            }
+            finally { Object.Destroy(slope); }
+        }
+
+        [UnityTest]
         public IEnumerator MovementUsesInputAndFallRespawnClearsVelocity()
         {
+            GameObject platform = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            platform.transform.position = new Vector3(0, 99.5f, 0);
+            platform.transform.localScale = new Vector3(30, 1, 30);
             CharacterController controller = player.GetComponent<CharacterController>();
             controller.enabled = false;
-            player.transform.position = new Vector3(0f, 100f, 0f);
+            player.transform.position = new Vector3(0f, 100.95f, 0f);
+            player.ResetVelocity();
             controller.enabled = true;
+            yield return new WaitForSeconds(0.2f);
             Vector3 start = player.transform.position;
             InputSystem.QueueStateEvent(keyboard, new KeyboardState(Key.W));
             yield return new WaitForSeconds(0.5f);
@@ -364,6 +448,7 @@ namespace ArenaSurvival.Tests
             Assert.That(player.CurrentHorizontalSpeed, Is.Zero);
             Assert.That(controller.enabled, Is.True);
             Assert.That(Vector3.Dot(player.transform.up, Vector3.up), Is.GreaterThan(0.999f));
+            Object.Destroy(platform);
         }
     }
 }

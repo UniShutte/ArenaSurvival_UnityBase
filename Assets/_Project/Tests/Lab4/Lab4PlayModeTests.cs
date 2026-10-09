@@ -22,7 +22,7 @@ namespace ArenaSurvival.Lab4.Tests
         [UnitySetUp]
         public IEnumerator SetUp()
         {
-            yield return SceneManager.LoadSceneAsync("Arena_01");
+            yield return SceneManager.LoadSceneAsync("Arena_02");
             yield return null;
             // Isolate the component tests from a student's Inspector-wired session and HUD.
             foreach (ArenaHud hud in Object.FindObjectsByType<ArenaHud>(FindObjectsSortMode.None))
