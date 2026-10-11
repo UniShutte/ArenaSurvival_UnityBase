@@ -47,6 +47,10 @@ namespace ArenaSurvival.Player
         private float groundedStepOffset;
         private int groundMask;
 
+        // Контакт снизу из предыдущего Move: не зависит от угла склона
+        // и не теряется, пока контроллер физически стоит на поверхности.
+        private bool touchedGroundLastMove;
+
         /// <summary>
         /// Текущая горизонтальная скорость нужна,
         /// например, для расчёта силы толкания.
@@ -68,24 +72,47 @@ namespace ArenaSurvival.Player
         private void Update()
         {
             if (inputReader.WasJumpPressed()) lastJumpPressedTime = Time.time;
-            bool grounded = verticalVelocity <= 0f && ProbeGround();
-            if (grounded)
+
+            // Контакт берётся у самого контроллера. Геометрический зонд
+            // не является признаком контакта: на склоне он может не достать
+            // поверхность, и тогда стоящий персонаж считался бы летящим.
+            bool contact = verticalVelocity <= 0f
+                && (characterController.isGrounded || touchedGroundLastMove);
+
+            // Землёй для прыжка считается только поверхность не круче slopeLimit.
+            bool walkable = contact
+                && ProbeGround(out RaycastHit groundHit)
+                && Vector3.Angle(groundHit.normal, Vector3.up) <= characterController.slopeLimit;
+
+            if (contact)
             {
-                lastGroundedTime = Time.time;
+                // Прижимаем к поверхности. Без этого гравитация накапливается
+                // каждый кадр, и контроллер разгоняется вниз по склону:
+                // визуально это выглядит как неуправляемое скольжение.
                 verticalVelocity = groundedVerticalVelocity;
+
+                // Управление доступно при любом контакте, а не только на пологом
+                // склоне: на слишком крутой поверхности игрок может уйти в сторону,
+                // вместо того чтобы «залипнуть». В полёте контакта нет, поэтому
+                // правило «в воздухе направление не меняется» сохраняется.
                 Vector2 movementInput = inputReader.ReadMovement();
                 UpdateHorizontalSpeed(movementInput);
                 // Keep this world-space velocity unchanged until landing, even when looking around.
                 horizontalVelocity = (transform.right * movementInput.x + transform.forward * movementInput.y)
                     * currentHorizontalSpeed;
             }
+
+            if (walkable) lastGroundedTime = Time.time;
+
             if (Time.time - lastGroundedTime <= coyoteTime && Time.time - lastJumpPressedTime <= jumpBufferTime)
             {
                 verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
                 lastGroundedTime = lastJumpPressedTime = float.NegativeInfinity;
-                grounded = false;
+                // В кадре прыжка stepOffset обнуляется, как при обычном отрыве.
+                contact = false;
             }
-            characterController.stepOffset = grounded ? groundedStepOffset : 0f;
+
+            characterController.stepOffset = contact ? groundedStepOffset : 0f;
             verticalVelocity += gravity * Time.deltaTime;
 
             Vector3 totalVelocity =
@@ -96,6 +123,7 @@ namespace ArenaSurvival.Player
             // поэтому скорость умножается на Time.deltaTime.
             CollisionFlags flags = characterController.Move(
                 totalVelocity * Time.deltaTime);
+            touchedGroundLastMove = (flags & CollisionFlags.Below) != 0;
             if ((flags & CollisionFlags.Above) != 0 && verticalVelocity > 0f) verticalVelocity = 0f;
         }
 
@@ -105,6 +133,7 @@ namespace ArenaSurvival.Player
             verticalVelocity = 0f;
             horizontalVelocity = Vector3.zero;
             lastGroundedTime = lastJumpPressedTime = float.NegativeInfinity;
+            touchedGroundLastMove = false;
         }
 
         private void UpdateHorizontalSpeed(
@@ -129,15 +158,25 @@ namespace ArenaSurvival.Player
                 acceleration * Time.deltaTime);
         }
 
-        private bool ProbeGround()
+        /// <summary>
+        /// Ищет поверхность под капсулой и возвращает её нормаль.
+        ///
+        /// Радиус зонда меньше радиуса капсулы: широкий SphereCast
+        /// цепляется за боковые грани тонких плит и за края.
+        /// </summary>
+        private bool ProbeGround(out RaycastHit hit)
         {
-            float radius = characterController.radius * 0.9f;
+            float radius = Mathf.Min(characterController.radius * 0.9f, 0.25f);
             Vector3 foot = transform.TransformPoint(characterController.center)
                 - Vector3.up * (characterController.height * 0.5f);
-            return Physics.SphereCast(foot + Vector3.up * (radius + 0.05f), radius, Vector3.down,
-                out RaycastHit hit, groundProbeDistance + 0.05f, groundMask, QueryTriggerInteraction.Ignore)
-                && Vector3.Angle(hit.normal, Vector3.up) <= characterController.slopeLimit;
+            Vector3 origin = foot + Vector3.up * (radius + 0.05f);
+            // На склоне поверхность проходит выше оси капсулы: вертикальный путь
+            // до неё растёт как r / cos(угол). С постоянным запасом 0.12 м пол
+            // находился только до 36°, хотя slopeLimit равен 45°.
+            float slopeReach = characterController.radius
+                * (1f / Mathf.Cos(characterController.slopeLimit * Mathf.Deg2Rad) - 1f);
+            float distance = 0.05f + groundProbeDistance + Mathf.Max(0f, slopeReach);
+            return Physics.SphereCast(origin, radius, Vector3.down, out hit, distance, groundMask, QueryTriggerInteraction.Ignore);
         }
     }
 }
-

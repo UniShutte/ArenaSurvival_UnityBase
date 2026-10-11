@@ -450,5 +450,58 @@ namespace ArenaSurvival.Tests
             Assert.That(Vector3.Dot(player.transform.up, Vector3.up), Is.GreaterThan(0.999f));
             Object.Destroy(platform);
         }
+
+        [UnityTest]
+        public IEnumerator MovementAndJumpWorkOnSteepWalkableSlopes()
+        {
+            // Регрессия: зонд пола с постоянным запасом 0.12 м переставал
+            // находить поверхность уже при уклоне около 36°, хотя slopeLimit
+            // равен 45°. Персонаж на склоне считался летящим: ввод не читался,
+            // прыжок не срабатывал, а накопленная гравитация уводила его
+            // вниз по склону как неуправляемое скольжение.
+            GameObject slope = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            slope.transform.position = new Vector3(0, 100, 0);
+            slope.transform.localScale = new Vector3(10, 0.2f, 16);
+            try
+            {
+                CharacterController controller = player.GetComponent<CharacterController>();
+                foreach (int angle in new[] { 20, 35, 44 })
+                {
+                    slope.transform.rotation = Quaternion.Euler(angle, 0, 0);
+                    yield return null;
+
+                    InputSystem.QueueStateEvent(keyboard, new KeyboardState());
+                    controller.enabled = false;
+                    player.transform.SetPositionAndRotation(new Vector3(0, 104, -3), Quaternion.identity);
+                    player.ResetVelocity();
+                    controller.enabled = true;
+                    yield return new WaitForSeconds(1);
+
+                    // Без ввода персонаж не должен уезжать по склону.
+                    Vector3 settled = player.transform.position;
+                    yield return new WaitForSeconds(0.5f);
+                    float drift = Vector3.ProjectOnPlane(player.transform.position - settled, Vector3.up).magnitude;
+                    Assert.That(drift, Is.LessThan(1.5f),
+                        "Склон " + angle + "°: персонаж не должен уезжать по склону.");
+
+                    // Симптом 1: ввод не читается, «не могу сойти куда-либо».
+                    InputSystem.QueueStateEvent(keyboard, new KeyboardState(Key.W));
+                    yield return new WaitForSeconds(0.25f);
+                    Assert.That(player.CurrentHorizontalSpeed, Is.EqualTo(5f).Within(0.6f),
+                        "Склон " + angle + "°: ввод должен читаться, пока есть контакт с поверхностью.");
+
+                    // Симптом 2: прыжок не срабатывает на допустимом уклоне.
+                    float before = player.transform.position.y;
+                    InputSystem.QueueStateEvent(keyboard, new KeyboardState(Key.W, Key.Space));
+                    yield return new WaitForSeconds(0.15f);
+                    Assert.That(player.transform.position.y, Is.GreaterThan(before + 0.35f),
+                        "Склон " + angle + "°: прыжок должен срабатывать на допустимом уклоне.");
+
+                    InputSystem.QueueStateEvent(keyboard, new KeyboardState());
+                    yield return new WaitForSeconds(0.3f);
+                }
+            }
+            finally { Object.Destroy(slope); }
+        }
     }
 }
