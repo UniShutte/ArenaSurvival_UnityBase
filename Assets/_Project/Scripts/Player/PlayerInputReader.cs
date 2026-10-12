@@ -92,12 +92,18 @@ namespace ArenaSurvival.Player
         }
 
         /// <summary>
-        /// Нажатый Ctrl включает приседание. Отпущенный Ctrl только запрашивает вставание.
+        /// Возвращает true, пока удерживается Ctrl.
+        /// Нажатый Ctrl включает приседание, отпущенный — только ЗАПРАШИВАЕТ вставание:
+        /// решение о вставании принимает PlayerMovement после проверки свободного места.
         /// </summary>
         public bool IsCrouchHeld()
         {
             Keyboard keyboard = Keyboard.current;
-            return keyboard != null && (keyboard.leftCtrlKey.isPressed || keyboard.rightCtrlKey.isPressed);
+
+            // Клавиатуры может не быть (например, в автоматическом тесте),
+            // поэтому сначала проверяем на null.
+            return keyboard != null &&
+                   (keyboard.leftCtrlKey.isPressed || keyboard.rightCtrlKey.isPressed);
         }
 
         /// <summary>
