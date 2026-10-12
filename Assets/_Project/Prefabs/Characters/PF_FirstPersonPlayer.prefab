@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2111082764260642816}
   m_Layer: 8
-  m_Name: Muzzle
+  m_Name: RifleMuzzle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -573,7 +573,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4824757695248832275}
   m_Layer: 8
-  m_Name: Muzzle
+  m_Name: ShotgunMuzzle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -787,14 +787,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 888c119f33ef5164499657897b6f8447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: ArenaSurvival.Core::ArenaSurvival.Combat.Weapon
-  projectilePool: {fileID: 0}
-  firePoint: {fileID: 6325125722319156314}
+  slots:
+  - data: {fileID: 11400000, guid: 1b1722479bc4ef048b57cdadd3b80597, type: 2}
+    pool: {fileID: 2107967425381128553}
+    view: {fileID: 148278892352840100}
+    muzzle: {fileID: 5446705242584205902}
+  - data: {fileID: 11400000, guid: 7f7d7cc7241d6794ca0708a29906dd1b, type: 2}
+    pool: {fileID: 2420096019108322819}
+    view: {fileID: 5795543068738726341}
+    muzzle: {fileID: 2111082764260642816}
+  - data: {fileID: 11400000, guid: 5311f4f18ebb76b45be4e35ac7bdbf62, type: 2}
+    pool: {fileID: 5306439167186695175}
+    view: {fileID: 5118122066394420540}
+    muzzle: {fileID: 4824757695248832275}
   playerLook: {fileID: 4776872559962365344}
   aimCamera: {fileID: 0}
   maximumAimDistance: 500
-  projectileSpeed: 25
-  damage: 25
-  fireInterval: 0.2
 --- !u!114 &7775688291154208732
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1093,7 +1101,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5446705242584205902}
   m_Layer: 8
-  m_Name: Muzzle
+  m_Name: PistolMuzzle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

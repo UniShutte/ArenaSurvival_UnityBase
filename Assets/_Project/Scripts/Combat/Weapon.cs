@@ -1,3 +1,4 @@
+using System;
 using ArenaSurvival.Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -5,158 +6,192 @@ using UnityEngine.InputSystem;
 namespace ArenaSurvival.Combat
 {
     /// <summary>
-    /// Запрашивает снаряды из ProjectilePool.
-    ///
-    /// Weapon не создаёт снаряды через Instantiate
-    /// и не уничтожает их через Destroy.
+    /// Состояние одного оружия.
+    /// Обычный сериализуемый класс: магазин и таймер принадлежат экземпляру игрока,
+    /// поэтому помечены [NonSerialized] и не сохраняются в префаб.
     /// </summary>
-    [DefaultExecutionOrder(200)]
-    public sealed class Weapon :
-        MonoBehaviour
+    [Serializable]
+    public sealed class WeaponSlot
     {
-        [Header("References")]
-        [SerializeField]
-        private ProjectilePool projectilePool;
+        public WeaponData data;        // характеристики из ассета
+        public ProjectilePool pool;    // свой пул снарядов для этого оружия
+        public GameObject view;        // визуальная ветка, которую включаем и выключаем
+        public Transform muzzle;       // точка вылета снаряда
+        [NonSerialized] public int ammo;            // текущий магазин
+        [NonSerialized] public float nextShotTime;  // время следующего разрешённого выстрела
+    }
 
-        [SerializeField]
-        private Transform firePoint;
+    /// <summary>
+    /// Три слота оружия: выбор клавишами 1, 2, 3, перезарядка по R.
+    /// Weapon не создаёт снаряды: он просит их у пула и сообщает о выстреле событиями.
+    /// </summary>
+    [DefaultExecutionOrder(200)]   // выстрел должен выполняться после Cinemachine Brain (порядок 100)
+    public sealed class Weapon : MonoBehaviour
+    {
+        [SerializeField] private WeaponSlot[] slots;       // ровно три элемента
+        [SerializeField] private PlayerLook playerLook;    // нужен, чтобы знать, захвачен ли курсор
+        [SerializeField] private Camera aimCamera;         // камера, из центра которой считаем прицел
+        [SerializeField, Min(1)] private float maximumAimDistance = 500;  // предел луча прицела
 
-        [SerializeField]
-        private PlayerLook playerLook;
+        private int current;            // индекс выбранного слота
+        private int aimMask;            // слои, которые учитывает луч прицела
+        private float reloadEnd;        // время окончания перезарядки
+        private bool selectionApplied;  // отличает первое подключение от повторного выбора
 
-        [SerializeField]
-        private Camera aimCamera;
+        public bool IsReloading { get; private set; }   // читают представление и HUD
+        public bool IsAiming { get; private set; }      // читают представление и камера прицеливания
+        public int CurrentIndex => current;
+        public int Ammo => slots[current].ammo;
+        public WeaponData CurrentData => slots[current].data;
 
-        [SerializeField, Min(1f)]
-        private float maximumAimDistance = 500f;
-
-        [Header("Weapon Settings")]
-        [SerializeField, Min(0f)]
-        private float projectileSpeed = 25f;
-
-        [SerializeField, Min(1)]
-        private int damage = 25;
-
-        [SerializeField, Min(0.01f)]
-        private float fireInterval = 0.2f;
-
-        private float nextAllowedFireTime;
-        private int aimMask;
-
-        private void Awake()
-        {
-            aimMask = Physics.DefaultRaycastLayers & ~LayerMask.GetMask("Player", "Projectile", "UI");
-            if (playerLook == null)
-            {
-                playerLook =
-                    GetComponent<PlayerLook>();
-            }
-        }
+        public event Action Changed;            // изменился магазин, выбор или перезарядка
+        public event Action<int> Fired;         // выстрел: индекс слота
+        public event Action<int> ReloadStarted; // начало перезарядки: индекс слота
 
         private void Start()
         {
-            if (aimCamera == null)
-                aimCamera = Camera.main;
-            // PlayerSpawner assigns the scene pool after Instantiate and before Start.
-            ValidateReferences();
+            // Ссылки ищем сами, если они не назначены в Inspector.
+            if (playerLook == null) playerLook = GetComponent<PlayerLook>();
+            if (aimCamera == null) aimCamera = Camera.main;
+
+            // Проверяем конфигурацию до начала работы: лучше ошибка в Console,
+            // чем молча неработающая стрельба.
+            if (slots == null || slots.Length != 3 || playerLook == null || aimCamera == null)
+            { Debug.LogError("Assign three weapon slots, look and camera.", this); enabled = false; return; }
+
+            foreach (WeaponSlot slot in slots)
+            {
+                if (slot == null || slot.data == null || slot.pool == null || slot.view == null || slot.muzzle == null
+                    || slot.data.roundsPerMinute <= 0 || slot.data.magazineSize < 1 || slot.data.pellets < 1)
+                { Debug.LogError("Invalid weapon slot.", this); enabled = false; return; }
+
+                slot.ammo = slot.data.magazineSize;   // каждый запуск начинается с полного магазина
+            }
+
+            // Луч прицела не должен попадать в собственное оружие, в летящий снаряд и в интерфейс.
+            aimMask = Physics.DefaultRaycastLayers & ~LayerMask.GetMask("Player", "Projectile", "UI");
+
+            Select(0);   // стартовое оружие — пистолет
         }
 
-        // Cinemachine Brain runs at order 100: aim after it has applied this frame's look.
+        private void Update()
+        {
+            // При паузе (timeScale = 0) и при свободном курсоре ввод оружия не читается.
+            if (Time.timeScale == 0 || !playerLook.IsCursorLocked) return;
+
+            Keyboard keyboard = Keyboard.current;
+            if (keyboard != null)
+            {
+                // Цифры выбирают слот. else if — за кадр обрабатывается ровно одно нажатие.
+                if (keyboard.digit1Key.wasPressedThisFrame) Select(0);
+                else if (keyboard.digit2Key.wasPressedThisFrame) Select(1);
+                else if (keyboard.digit3Key.wasPressedThisFrame) Select(2);
+            }
+
+            // Перезарядка завершается по времени: это единственный источник истины
+            // по патронам. Анимация перезарядки патроны не начисляет.
+            if (IsReloading && Time.time >= reloadEnd)
+            {
+                slots[current].ammo = CurrentData.magazineSize;
+                IsReloading = false;
+                Changed?.Invoke();
+            }
+
+            if (keyboard != null && keyboard.rKey.wasPressedThisFrame) BeginReload();
+
+            // Прицеливание — это удержание правой кнопки мыши, но не во время перезарядки.
+            IsAiming = !IsReloading && Mouse.current != null && Mouse.current.rightButton.isPressed;
+        }
+
+        // Cinemachine Brain обновляет камеру с порядком 100, поэтому выстрел
+        // выполняется в LateUpdate: прицел считается по уже применённому положению.
         private void LateUpdate()
         {
-            if (!CanFire())
-            {
-                return;
-            }
+            if (Time.timeScale == 0 || !playerLook.IsCursorLocked || IsReloading) return;
 
-            Mouse mouse =
-                Mouse.current;
+            Mouse mouse = Mouse.current;
+            if (mouse == null) return;
 
-            if (mouse == null ||
-                !mouse.leftButton.wasPressedThisFrame)
-            {
-                return;
-            }
+            // Автоматический режим стреляет при удержании, одиночный — по новому нажатию.
+            bool requested = CurrentData.automatic ? mouse.leftButton.isPressed : mouse.leftButton.wasPressedThisFrame;
 
-            Fire();
+            // Пустой магазин не создаёт снаряд и не вызывает событие Fired.
+            if (requested && Ammo > 0 && Time.time >= slots[current].nextShotTime) Fire();
         }
 
-        private bool CanFire()
+        private void Select(int index)
         {
-            if (projectilePool == null ||
-                firePoint == null ||
-                playerLook == null || aimCamera == null)
-            {
-                return false;
-            }
+            // Повторное нажатие клавиши текущего оружия не должно отменять перезарядку
+            // и не должно сбрасывать таймер выстрела.
+            if (selectionApplied && index == current) return;
+            selectionApplied = true;
 
-            if (!playerLook.IsCursorLocked)
-            {
-                return false;
-            }
+            IsReloading = false;   // смена оружия отменяет перезарядку
+            IsAiming = false;
+            current = index;
 
-            return Time.time >=
-                   nextAllowedFireTime;
+            // Включаем только выбранную модель. Пулы при этом остаются активными,
+            // иначе уже летящие снаряды исчезли бы вместе с родителем.
+            for (int i = 0; i < slots.Length; i++) slots[i].view.SetActive(i == current);
+
+            Changed?.Invoke();
+        }
+
+        private void BeginReload()
+        {
+            // Полный магазин не перезаряжается: иначе R запускал бы звук и анимацию впустую.
+            if (IsReloading || Ammo == CurrentData.magazineSize) return;
+
+            IsReloading = true;
+            IsAiming = false;
+            reloadEnd = Time.time + CurrentData.reloadSeconds;
+            ReloadStarted?.Invoke(current);
+            Changed?.Invoke();
         }
 
         private void Fire()
         {
-            Ray aimRay = aimCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f));
-            Vector3 aimPoint = Physics.Raycast(aimRay, out RaycastHit hit, maximumAimDistance,
-                aimMask, QueryTriggerInteraction.Ignore) ? hit.point : aimRay.GetPoint(maximumAimDistance);
-            Vector3 direction = aimPoint - firePoint.position;
+            WeaponSlot slot = slots[current];
+            WeaponData data = slot.data;
 
-            // Do not fire backwards at a surface behind the muzzle, or spawn through nearby cover.
-            if (Vector3.Dot(direction, aimRay.direction) <= 0f ||
-                Physics.Linecast(aimCamera.transform.position, firePoint.position,
-                    aimMask, QueryTriggerInteraction.Ignore))
-                return;
+            // Луч из центра экрана определяет, КУДА целится игрок.
+            Ray ray = aimCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f));
+            Vector3 point = Physics.Raycast(ray, out RaycastHit hit, maximumAimDistance,
+                aimMask, QueryTriggerInteraction.Ignore) ? hit.point : ray.GetPoint(maximumAimDistance);
 
-            nextAllowedFireTime =
-                Time.time + fireInterval;
+            // Снаряд летит от дула к найденной точке, а не параллельно взгляду.
+            Vector3 direction = point - slot.muzzle.position;
 
-            Vector3 velocity =
-                direction.normalized *
-                projectileSpeed;
+            // Не стреляем назад и не пробиваем укрытие, закрывающее ствол.
+            if (Vector3.Dot(direction, ray.direction) <= 0 || Physics.Linecast(aimCamera.transform.position,
+                slot.muzzle.position, aimMask, QueryTriggerInteraction.Ignore)) return;
 
-            projectilePool.Spawn(
-                firePoint.position,
-                Quaternion.LookRotation(direction),
-                velocity,
-                damage);
+            Quaternion basis = Quaternion.LookRotation(direction);
+
+            // Патрон расходуется один раз на выстрел, ДО цикла дробин.
+            slot.ammo--;
+            slot.nextShotTime = Time.time + 60f / data.roundsPerMinute;  // 60f, а не 60!
+
+            for (int i = 0; i < data.pellets; i++)
+            {
+                // Новое случайное смещение на каждую дробину: одно смещение перед циклом
+                // отправило бы все дробинки по одной траектории.
+                Vector2 spread = UnityEngine.Random.insideUnitCircle * Mathf.Tan(data.spreadDegrees * Mathf.Deg2Rad);
+                Vector3 flight = (basis * new Vector3(spread.x, spread.y, 1)).normalized;
+
+                slot.pool.Spawn(slot.muzzle.position, Quaternion.LookRotation(flight), flight * data.projectileSpeed, data.damage);
+            }
+
+            // События сообщают о факте. Подписчики (анимация, звук, HUD) появятся позже.
+            Fired?.Invoke(current);
+            Changed?.Invoke();
         }
 
-        public void SetProjectilePool(ProjectilePool pool)
+        private void OnDisable()
         {
-            projectilePool = pool;
+            // Выключенное оружие не должно оставаться «перезаряжающимся».
+            IsReloading = false;
+            IsAiming = false;
         }
-
-        private void ValidateReferences()
-        {
-            if (aimCamera == null)
-                Debug.LogWarning("Weapon: assign Aim Camera or tag the scene camera MainCamera.", this);
-
-            if (projectilePool == null)
-            {
-                Debug.LogWarning(
-                    "Weapon: Projectile Pool не назначен.",
-                    this);
-            }
-
-            if (firePoint == null)
-            {
-                Debug.LogWarning(
-                    "Weapon: Fire Point не назначен.",
-                    this);
-            }
-
-            if (playerLook == null)
-            {
-                Debug.LogWarning(
-                    "Weapon: Player Look не найден.",
-                    this);
-            }
-        }
-
     }
 }

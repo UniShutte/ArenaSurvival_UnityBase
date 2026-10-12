@@ -1115,7 +1115,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: ArenaSurvival.Core::ArenaSurvival.Spawning.PlayerSpawner
   playerPrefab: {fileID: 6245289102481349171, guid: cfe0114b7a8d72a489f3bfe740a34083, type: 3}
   spawnPoint: {fileID: 1250950199}
-  projectilePool: {fileID: 1688480211}
 --- !u!1 &353369932
 GameObject:
   m_ObjectHideFlags: 0
@@ -4775,7 +4774,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1688480210}
   - {fileID: 177407447}
   m_Father: {fileID: 2115182017}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5758,55 +5756,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1669450345}
   m_CullTransparentMesh: 1
---- !u!1 &1688480209
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1688480210}
-  - component: {fileID: 1688480211}
-  m_Layer: 0
-  m_Name: ProjectilePool
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1688480210
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1688480209}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1363923723}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1688480211
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1688480209}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09b01eaba02047a4f9c7e2cb72fcda70, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: ArenaSurvival.Core::ArenaSurvival.Combat.ProjectilePool
-  projectilePrefab: {fileID: 1003793675649823022, guid: c254890f3f804704587be3d6d8b4cd44, type: 3}
-  projectileContainer: {fileID: 177407447}
-  defaultCapacity: 20
-  maximumSize: 100
-  logPoolOperations: 0
 --- !u!4 &1699551002 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7703926131011806089, guid: 76484c2e11aaaac4293cf3d90adb12e5, type: 3}
