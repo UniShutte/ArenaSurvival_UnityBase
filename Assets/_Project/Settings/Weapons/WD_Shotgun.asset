@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: ArenaSurvival.Core::ArenaSurvival.WeaponData
   displayName: Shotgun
   magazineSize: 8
-  roundsPerMinute: 35
+  roundsPerMinute: 150
   automatic: 0
   projectileSpeed: 40
   damage: 8
   pellets: 8
   spreadDegrees: 4
-  reloadSeconds: 2.8
+  reloadSeconds: 2.2

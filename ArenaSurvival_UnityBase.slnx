@@ -5,4 +5,5 @@
   <Project Path="ArenaSurvival.Lab4.Tests.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
   <Project Path="ArenaSurvival.PlayModeTests.csproj" />
+  <Project Path="ArenaSurvival.Lab5.csproj" />
 </Solution>

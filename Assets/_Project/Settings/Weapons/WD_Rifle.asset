@@ -20,4 +20,4 @@ MonoBehaviour:
   damage: 15
   pellets: 1
   spreadDegrees: 0
-  reloadSeconds: 2.4
+  reloadSeconds: 1.2

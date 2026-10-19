@@ -1,0 +1,17 @@
+{
+    "name": "ArenaSurvival.Lab5",
+    "rootNamespace": "ArenaSurvival.Lab5",
+    "references": [
+        "GUID:ec7a15d5a1f644a4bbf15a0971ff3bd4",
+        "GUID:4307f53044263cf4b835bd812fc161a4"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

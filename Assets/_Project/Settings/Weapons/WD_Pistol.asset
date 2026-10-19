@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: ArenaSurvival.Core::ArenaSurvival.WeaponData
   displayName: Pistol
   magazineSize: 18
-  roundsPerMinute: 40
+  roundsPerMinute: 130
   automatic: 0
   projectileSpeed: 45
-  damage: 25
+  damage: 10
   pellets: 1
   spreadDegrees: 0
-  reloadSeconds: 1.8
+  reloadSeconds: 1

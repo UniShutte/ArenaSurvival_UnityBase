@@ -60,9 +60,13 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[2]'
       value: 
       objectReference: {fileID: 2100000, guid: 028561743a9dfba4d92ff1c870cc36d0, type: 2}
+    - target: {fileID: -6684175587053542046, guid: 7395db57e5f3c2e4aa44bd20ecee1188, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 32c33ec7e9db0cf4788048ffa92c4f0c, type: 2}
     - target: {fileID: 919132149155446097, guid: 7395db57e5f3c2e4aa44bd20ecee1188, type: 3}
       propertyPath: m_Name
-      value: Tactical Pistol
+      value: PF_Pistol
       objectReference: {fileID: 0}
     - target: {fileID: 5232627393660835655, guid: 7395db57e5f3c2e4aa44bd20ecee1188, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
