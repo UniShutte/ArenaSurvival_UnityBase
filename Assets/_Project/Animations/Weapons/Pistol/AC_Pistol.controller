@@ -176,7 +176,7 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
-  - m_ConditionMode: 1
+  - m_ConditionMode: 2
     m_ConditionEvent: Aiming
     m_EventTreshold: 0
   - m_ConditionMode: 1
@@ -223,7 +223,7 @@ AnimatorStateTransition:
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
-  m_CanTransitionToSelf: 1
+  m_CanTransitionToSelf: 0
 --- !u!91 &9100000
 AnimatorController:
   m_ObjectHideFlags: 0
@@ -452,13 +452,13 @@ AnimatorStateMachine:
     m_Position: {x: 610, y: 120, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -2083893166749500353}
-    m_Position: {x: 880, y: 270, z: 0}
+    m_Position: {x: 880, y: 400, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -5921557465923022576}
-    m_Position: {x: 310, y: -90, z: 0}
+    m_Position: {x: 310, y: -180, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -2320249745747130487}
-    m_Position: {x: 880, y: -150, z: 0}
+    m_Position: {x: 880, y: -180, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions:
   - {fileID: -1008073691414985694}
