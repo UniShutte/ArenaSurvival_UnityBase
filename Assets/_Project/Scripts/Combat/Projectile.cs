@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.Pool;
+using System;                      // Action и событие HitConfirmed
+using ArenaSurvival.HealthSystem;  // Health
 
 namespace ArenaSurvival.Combat
 {
@@ -19,6 +21,11 @@ namespace ArenaSurvival.Combat
         [SerializeField, Min(0.1f)]
         private float maximumLifetime = 3f;
 
+        [Header("Impact Audio")]
+        [SerializeField] private AudioSource impactAudioPrefab; // prefab PF_ImpactAudio
+        [SerializeField] private AudioClip enemyHitClip;        // звук попадания по цели
+        [SerializeField] private AudioClip stoneHitClip;        // звук рикошета по камню
+
         private Rigidbody body;
         private SphereCollider sphere;
         private int collisionMask;
@@ -27,6 +34,9 @@ namespace ArenaSurvival.Combat
         private float remainingLifetime;
         private int damage;
         private bool isReleased;
+
+        /// <summary> Подтверждение реального уменьшения здоровья. </summary>
+        public static event Action<Health> HitConfirmed;
 
         private void Awake()
         {
@@ -100,11 +110,10 @@ namespace ArenaSurvival.Combat
             // Trigger contacts alone can miss thin obstacles between physics steps.
             if (Physics.SphereCast(center, radius, step.normalized,
                     out RaycastHit hit, step.magnitude, collisionMask, QueryTriggerInteraction.Ignore))
-                OnTriggerEnter(hit.collider);
+                ResolveHit(hit.collider, hit.point); 
         }
 
-        private void OnTriggerEnter(
-            Collider other)
+        private void OnTriggerEnter(Collider other)
         {
             if (isReleased || other.isTrigger)
             {
@@ -120,6 +129,60 @@ namespace ArenaSurvival.Combat
 
             // Снаряд возвращается в пул после
             // столкновения с целью или окружением.
+            Release();
+        }
+
+        /// <summary>
+        /// Единственный путь обработки попадания.
+        /// </summary>
+        private void ResolveHit(Collider other, Vector3 point)
+        {
+            // 1. Повторный вызов после возврата в пул и триггеры нас не интересуют.
+            if (isReleased || other == null || other.isTrigger)
+            {
+                return;
+            }
+
+            // 2. Health имеет приоритет над StoneSurface: каменная сфера-цель
+            //    должна звучать как попадание, а не как промах о декорацию.
+            Health health = other.GetComponentInParent<Health>();
+            if (health != null)
+            {
+                // 3. Урон наносим только живой цели.
+                if (health.CurrentHealth > 0)
+                {
+                    int before = health.CurrentHealth;
+                    health.ApplyDamage(damage);
+                    // 4. Звук и подтверждение — только если HP действительно уменьшилось.
+                    if (health.CurrentHealth < before)
+                    {
+                        PlayImpact(enemyHitClip, point);
+                        HitConfirmed?.Invoke(health);
+                    }
+                }
+
+                // Попадание по уже мёртвой цели нового подтверждения не даёт.
+                Release();
+                return;
+            }
+
+            // 5. Цели нет, но есть маркер камня: играем рикошет.
+            if (other.GetComponentInParent<StoneSurface>() != null)
+            {
+                PlayImpact(stoneHitClip, point);
+                Release();
+                return;
+            }
+
+            // 6. Поддержка другого IDamageable. Health обработан выше,
+            //    поэтому урон не удваивается.
+            if (other.TryGetComponent(out IDamageable damageable))
+            {
+                damageable.ApplyDamage(damage);
+            }
+
+            // 7. Возврат в пул. Защита isReleased обязательна: SphereCast
+            //    и trigger могут сообщить об одном столкновении.
             Release();
         }
 
@@ -140,5 +203,23 @@ namespace ArenaSurvival.Combat
 
             ownerPool?.Release(this);
         }
+
+
+        /// <summary>
+        /// Временный источник звука в точке попадания: AudioSource самого снаряда
+        /// обрывается, когда пул выключает объект.
+        /// </summary>
+        private void PlayImpact(AudioClip clip, Vector3 point)
+        {
+            if (clip == null || impactAudioPrefab == null) return; // нечего играть
+                                                                   // Отдельный объект живёт независимо от снаряда и его пула.
+            AudioSource source = Instantiate(impactAudioPrefab, point, Quaternion.identity);
+            source.clip = clip;
+            source.Play();
+            // Удаляем ровно после окончания клипа, чтобы звук не оборвался.
+            Destroy(source.gameObject, clip.length + 0.1f);
+        }
     }
+
+
 }

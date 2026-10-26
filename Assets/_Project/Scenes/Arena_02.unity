@@ -256,6 +256,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8188695}
   m_CullTransparentMesh: 1
+--- !u!1 &27611520 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4166463906511067698, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
+  m_PrefabInstance: {fileID: 509758550}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &49256497
 GameObject:
   m_ObjectHideFlags: 0
@@ -535,7 +540,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4166463906511067698, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2113147938}
   m_SourcePrefab: {fileID: 100100000, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
 --- !u!4 &165460261 stripped
 Transform:
@@ -577,6 +585,11 @@ Transform:
 Transform:
   m_CorrespondingSourceObject: {fileID: 7703926131011806089, guid: 76484c2e11aaaac4293cf3d90adb12e5, type: 3}
   m_PrefabInstance: {fileID: 1705957053}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &232289381 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4166463906511067698, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
+  m_PrefabInstance: {fileID: 1132063080}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &254712769
 GameObject:
@@ -761,7 +774,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4166463906511067698, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 651828499}
   m_SourcePrefab: {fileID: 100100000, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
 --- !u!4 &276053428 stripped
 Transform:
@@ -1655,6 +1671,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 450652300}
   m_CullTransparentMesh: 1
+--- !u!1 &481242365 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4166463906511067698, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
+  m_PrefabInstance: {fileID: 7105006443098614673}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &497791258
 GameObject:
   m_ObjectHideFlags: 0
@@ -1883,13 +1904,28 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4166463906511067698, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 509758555}
   m_SourcePrefab: {fileID: 100100000, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
 --- !u!4 &509758551 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3409607079437693002, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
   m_PrefabInstance: {fileID: 509758550}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &509758555
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 27611520}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc910e3da3f14ed4483c8b6ddc97aab6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ArenaSurvival.Core::ArenaSurvival.Combat.StoneSurface
 --- !u!1001 &533282859
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2080,13 +2116,38 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4166463906511067698, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 618550636}
   m_SourcePrefab: {fileID: 100100000, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
 --- !u!4 &576714348 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3409607079437693002, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
   m_PrefabInstance: {fileID: 576714347}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &591250309 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 213812772431286977, guid: 198d55b6a021922498c86788ca2e3e31, type: 3}
+  m_PrefabInstance: {fileID: 6733292549143497538}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &618550632 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4166463906511067698, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
+  m_PrefabInstance: {fileID: 576714347}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &618550636
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 618550632}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc910e3da3f14ed4483c8b6ddc97aab6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ArenaSurvival.Core::ArenaSurvival.Combat.StoneSurface
 --- !u!1 &646056195
 GameObject:
   m_ObjectHideFlags: 0
@@ -2299,6 +2360,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 650065402}
   m_CullTransparentMesh: 1
+--- !u!1 &651828495 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4166463906511067698, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
+  m_PrefabInstance: {fileID: 276053427}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &651828499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 651828495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc910e3da3f14ed4483c8b6ddc97aab6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ArenaSurvival.Core::ArenaSurvival.Combat.StoneSurface
 --- !u!4 &665237537 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2723083551288423960, guid: 15f5330a771cda4418a3cf7367334f4a, type: 3}
@@ -2800,10 +2878,18 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7157695194028282964, guid: 00a3d2ae7973ee444aff137cef73e70c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1932099425}
     - targetCorrespondingSourceObject: {fileID: 8616900365677394600, guid: 00a3d2ae7973ee444aff137cef73e70c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1978682602}
   m_SourcePrefab: {fileID: 100100000, guid: 00a3d2ae7973ee444aff137cef73e70c, type: 3}
+--- !u!1 &759381629 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4166463906511067698, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
+  m_PrefabInstance: {fileID: 779995562}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &760216495
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2973,13 +3059,28 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4166463906511067698, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 779995567}
   m_SourcePrefab: {fileID: 100100000, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
 --- !u!4 &779995563 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3409607079437693002, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
   m_PrefabInstance: {fileID: 779995562}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &779995567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 759381629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc910e3da3f14ed4483c8b6ddc97aab6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ArenaSurvival.Core::ArenaSurvival.Combat.StoneSurface
 --- !u!1001 &786524641
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3051,7 +3152,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4166463906511067698, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1793812174}
   m_SourcePrefab: {fileID: 100100000, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
 --- !u!4 &786524642 stripped
 Transform:
@@ -3113,7 +3217,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4166463906511067698, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1615870910}
   m_SourcePrefab: {fileID: 100100000, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
 --- !u!4 &852140763 stripped
 Transform:
@@ -3262,6 +3369,11 @@ Transform:
   - {fileID: 1858204860}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &921426886 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7157695194028282964, guid: 00a3d2ae7973ee444aff137cef73e70c, type: 3}
+  m_PrefabInstance: {fileID: 743007884}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &959191707 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3781153479543888395, guid: 8c651839cd77054488c6a67ac53f2cd8, type: 3}
@@ -3277,6 +3389,11 @@ MonoBehaviour:
 Transform:
   m_CorrespondingSourceObject: {fileID: 7737720344706032247, guid: 8c651839cd77054488c6a67ac53f2cd8, type: 3}
   m_PrefabInstance: {fileID: 1611386839}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &962332133 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4166463906511067698, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
+  m_PrefabInstance: {fileID: 1209824914}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1026323216
 GameObject:
@@ -3375,6 +3492,9 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7157695194028282964, guid: 00a3d2ae7973ee444aff137cef73e70c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1441450502}
     - targetCorrespondingSourceObject: {fileID: 8616900365677394600, guid: 00a3d2ae7973ee444aff137cef73e70c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1122380858}
@@ -3766,6 +3886,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Cinemachine::Cinemachine.CinemachinePipeline
+--- !u!1 &1101434770 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6557945633435819265, guid: 9ab4375c453fbe14f97e663f50b7ccf5, type: 3}
+  m_PrefabInstance: {fileID: 8413133154530100825}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1109622259 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4166463906511067698, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
+  m_PrefabInstance: {fileID: 1508711994}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1122380856 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8616900365677394600, guid: 00a3d2ae7973ee444aff137cef73e70c, type: 3}
@@ -3869,13 +3999,28 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4166463906511067698, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1132063085}
   m_SourcePrefab: {fileID: 100100000, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
 --- !u!4 &1132063081 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3409607079437693002, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
   m_PrefabInstance: {fileID: 1132063080}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1132063085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 232289381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc910e3da3f14ed4483c8b6ddc97aab6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ArenaSurvival.Core::ArenaSurvival.Combat.StoneSurface
 --- !u!1 &1134131475
 GameObject:
   m_ObjectHideFlags: 0
@@ -3951,6 +4096,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1134131475}
   m_CullTransparentMesh: 1
+--- !u!1 &1136920115 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7157695194028282964, guid: 00a3d2ae7973ee444aff137cef73e70c, type: 3}
+  m_PrefabInstance: {fileID: 1026865035}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1141452623
 GameObject:
   m_ObjectHideFlags: 0
@@ -4437,13 +4587,28 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4166463906511067698, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1209824919}
   m_SourcePrefab: {fileID: 100100000, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
 --- !u!4 &1209824915 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3409607079437693002, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
   m_PrefabInstance: {fileID: 1209824914}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1209824919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 962332133}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc910e3da3f14ed4483c8b6ddc97aab6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ArenaSurvival.Core::ArenaSurvival.Combat.StoneSurface
 --- !u!1 &1250950198
 GameObject:
   m_ObjectHideFlags: 0
@@ -4870,6 +5035,18 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2293713507212081336, guid: 00a3d2ae7973ee444aff137cef73e70c, type: 3}
   m_PrefabInstance: {fileID: 1026865035}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1441450502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1136920115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc910e3da3f14ed4483c8b6ddc97aab6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ArenaSurvival.Core::ArenaSurvival.Combat.StoneSurface
 --- !u!1 &1462965029
 GameObject:
   m_ObjectHideFlags: 0
@@ -5007,6 +5184,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1462965029}
   m_CullTransparentMesh: 1
+--- !u!1 &1487960226 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4166463906511067698, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
+  m_PrefabInstance: {fileID: 2072790958}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1489838178 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2723083551288423960, guid: 15f5330a771cda4418a3cf7367334f4a, type: 3}
@@ -5142,13 +5324,28 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4166463906511067698, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1508711999}
   m_SourcePrefab: {fileID: 100100000, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
 --- !u!4 &1508711995 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3409607079437693002, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
   m_PrefabInstance: {fileID: 1508711994}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1508711999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1109622259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc910e3da3f14ed4483c8b6ddc97aab6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ArenaSurvival.Core::ArenaSurvival.Combat.StoneSurface
 --- !u!1 &1525719414
 GameObject:
   m_ObjectHideFlags: 0
@@ -5552,6 +5749,23 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8c651839cd77054488c6a67ac53f2cd8, type: 3}
+--- !u!1 &1615870906 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4166463906511067698, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
+  m_PrefabInstance: {fileID: 852140762}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1615870910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1615870906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc910e3da3f14ed4483c8b6ddc97aab6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ArenaSurvival.Core::ArenaSurvival.Combat.StoneSurface
 --- !u!1 &1623034451
 GameObject:
   m_ObjectHideFlags: 0
@@ -6027,6 +6241,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1770160867}
   m_CullTransparentMesh: 1
+--- !u!1 &1793812170 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4166463906511067698, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
+  m_PrefabInstance: {fileID: 786524641}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1793812174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1793812170}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc910e3da3f14ed4483c8b6ddc97aab6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ArenaSurvival.Core::ArenaSurvival.Combat.StoneSurface
 --- !u!1 &1833828705
 GameObject:
   m_ObjectHideFlags: 0
@@ -6209,6 +6440,18 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2293713507212081336, guid: 00a3d2ae7973ee444aff137cef73e70c, type: 3}
   m_PrefabInstance: {fileID: 743007884}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1932099425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 921426886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc910e3da3f14ed4483c8b6ddc97aab6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ArenaSurvival.Core::ArenaSurvival.Combat.StoneSurface
 --- !u!1 &1978682600 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8616900365677394600, guid: 00a3d2ae7973ee444aff137cef73e70c, type: 3}
@@ -6449,13 +6692,28 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4166463906511067698, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2072790963}
   m_SourcePrefab: {fileID: 100100000, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
 --- !u!4 &2072790959 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3409607079437693002, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
   m_PrefabInstance: {fileID: 2072790958}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2072790963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1487960226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc910e3da3f14ed4483c8b6ddc97aab6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ArenaSurvival.Core::ArenaSurvival.Combat.StoneSurface
 --- !u!1 &2102339278
 GameObject:
   m_ObjectHideFlags: 0
@@ -6531,6 +6789,23 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &2113147934 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4166463906511067698, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
+  m_PrefabInstance: {fileID: 165460260}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2113147938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2113147934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc910e3da3f14ed4483c8b6ddc97aab6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ArenaSurvival.Core::ArenaSurvival.Combat.StoneSurface
 --- !u!1 &2115182016
 GameObject:
   m_ObjectHideFlags: 0
@@ -6756,11 +7031,35 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2223138166504621870, guid: 9ab4375c453fbe14f97e663f50b7ccf5, type: 3}
   m_PrefabInstance: {fileID: 8413133154530100825}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1515326072929595427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1101434770}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc910e3da3f14ed4483c8b6ddc97aab6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ArenaSurvival.Core::ArenaSurvival.Combat.StoneSurface
 --- !u!4 &1662403078917224026 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3409607079437693002, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
   m_PrefabInstance: {fileID: 7105006443098614673}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1662403078917224030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 481242365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc910e3da3f14ed4483c8b6ddc97aab6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ArenaSurvival.Core::ArenaSurvival.Combat.StoneSurface
 --- !u!1001 &5217883559961598411
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6890,7 +7189,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 213812772431286977, guid: 198d55b6a021922498c86788ca2e3e31, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7694163676132229831}
   m_SourcePrefab: {fileID: 100100000, guid: 198d55b6a021922498c86788ca2e3e31, type: 3}
 --- !u!1001 &7105006443098614673
 PrefabInstance:
@@ -6963,13 +7265,28 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4166463906511067698, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1662403078917224030}
   m_SourcePrefab: {fileID: 100100000, guid: fbc92728ad9283240ae45538b6c36f84, type: 3}
 --- !u!4 &7694163676132229830 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4268784369115621754, guid: 198d55b6a021922498c86788ca2e3e31, type: 3}
   m_PrefabInstance: {fileID: 6733292549143497538}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7694163676132229831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 591250309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc910e3da3f14ed4483c8b6ddc97aab6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ArenaSurvival.Core::ArenaSurvival.Combat.StoneSurface
 --- !u!1001 &8413133154530100825
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7037,7 +7354,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6557945633435819265, guid: 9ab4375c453fbe14f97e663f50b7ccf5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1515326072929595427}
   m_SourcePrefab: {fileID: 100100000, guid: 9ab4375c453fbe14f97e663f50b7ccf5, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
