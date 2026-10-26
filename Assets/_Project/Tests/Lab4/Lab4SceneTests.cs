@@ -69,7 +69,10 @@ namespace ArenaSurvival.Lab4.Tests
             Transform follow = Object.FindFirstObjectByType<CinemachineVirtualCamera>().Follow;
             Assert.That(Vector3.Distance(Camera.main.transform.position, follow.position), Is.LessThan(0.001f));
             Assert.That(Quaternion.Angle(Camera.main.transform.rotation, follow.rotation), Is.LessThan(0.01f));
-            Assert.That(follow.Find("FirePoint").localPosition.x, Is.GreaterThan(0), "Keep the right-hand muzzle offset.");
+            Weapon weapon = Object.FindFirstObjectByType<Weapon>();
+            Transform muzzle = Field<WeaponSlot[]>(weapon, "slots")[weapon.CurrentIndex].muzzle;
+            Assert.That(follow.InverseTransformPoint(muzzle.position).x, Is.GreaterThan(0),
+                "Keep the right-hand muzzle offset.");
             Image crosshair = hud.transform.Find("Crosshair").GetComponent<Image>();
             Assert.That(crosshair, Is.Not.Null);
             Assert.That(crosshair.sprite, Is.Not.Null);

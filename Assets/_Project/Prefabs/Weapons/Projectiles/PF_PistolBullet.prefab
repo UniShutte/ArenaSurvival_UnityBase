@@ -155,5 +155,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: ArenaSurvival.Core::ArenaSurvival.Combat.Projectile
   maximumLifetime: 3
   impactAudioPrefab: {fileID: 6009170137054441426, guid: e46d1c6a7c5e2e74dbdcf05f0e4079dc, type: 3}
-  enemyHitClip: {fileID: 8300000, guid: a98537918d51770428f1314034a17112, type: 3}
-  stoneHitClip: {fileID: 8300000, guid: c9330f7fdb6947b408350d570dc862ea, type: 3}
+  enemyHitClip: {fileID: 8300000, guid: b2ca3b016768b2c4588fd1dd99f8b3d6, type: 3}
+  stoneHitClip: {fileID: 8300000, guid: 05630b0582ac9304787e58d91901f583, type: 3}

@@ -110,26 +110,17 @@ namespace ArenaSurvival.Combat
             // Trigger contacts alone can miss thin obstacles between physics steps.
             if (Physics.SphereCast(center, radius, step.normalized,
                     out RaycastHit hit, step.magnitude, collisionMask, QueryTriggerInteraction.Ignore))
-                ResolveHit(hit.collider, hit.point); 
+                ResolveHit(hit.collider, hit.point);
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            if (isReleased || other.isTrigger)
+            if (isReleased || other == null || other.isTrigger)
             {
                 return;
             }
 
-            if (other.TryGetComponent(
-                    out IDamageable damageable))
-            {
-                damageable.ApplyDamage(
-                    damage);
-            }
-
-            // Снаряд возвращается в пул после
-            // столкновения с целью или окружением.
-            Release();
+            ResolveHit(other, other.ClosestPoint(body.position));
         }
 
         /// <summary>
