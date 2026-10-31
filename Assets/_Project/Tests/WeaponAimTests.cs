@@ -266,6 +266,52 @@ namespace ArenaSurvival.Tests
             }
         }
 
+        [UnityTest]
+        public IEnumerator AllWeaponsSpawnAtTheAnimatedBarrelInHipAimAndRecoilPoses()
+        {
+            var slots = (WeaponSlot[])typeof(Weapon)
+                .GetField("slots", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(weapon);
+            WeaponEffects effects = weapon.GetComponent<WeaponEffects>();
+            effects.enabled = false;
+            for (int index = 0; index < slots.Length; index++)
+            {
+                typeof(Weapon).GetMethod("Select", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .Invoke(weapon, new object[] { index });
+                WeaponSlot slot = slots[index];
+                Animator animator = slot.view.GetComponentInChildren<Animator>();
+                animator.enabled = false;
+                Transform model = animator.transform.Find("Model");
+                AnimationClip idle = animator.runtimeAnimatorController.animationClips
+                    .Single(clip => clip.name.EndsWith("_Idle"));
+                idle.SampleAnimation(animator.gameObject, 0);
+                Vector3 barrelOffset = model.InverseTransformPoint(slot.muzzle.position);
+                foreach (string suffix in new[] { "_Idle", "_Aim", "_Fire", "_FireAim" })
+                {
+                    AnimationClip clip = animator.runtimeAnimatorController.animationClips
+                        .Single(item => item.name.EndsWith(suffix));
+                    foreach (float time in new[] { 0f, clip.length * 0.2f, clip.length })
+                    {
+                        clip.SampleAnimation(animator.gameObject, time);
+                        Vector3 expected = model.TransformPoint(barrelOffset);
+                        Assert.That(Vector3.Distance(slot.muzzle.position, expected), Is.LessThan(0.001f),
+                            clip.name + " must move the muzzle with the visible barrel.");
+                        Physics.SyncTransforms();
+                        Fire();
+                        Projectile[] shots = Object.FindObjectsByType<Projectile>(FindObjectsSortMode.None);
+                        Assert.That(shots.Length, Is.EqualTo(slot.data.pellets), clip.name);
+                        foreach (Projectile shot in shots)
+                        {
+                            Assert.That(Vector3.Distance(shot.transform.position, expected), Is.LessThan(0.001f));
+                            typeof(Projectile).GetMethod("Release", BindingFlags.Instance | BindingFlags.NonPublic)
+                                .Invoke(shot, null);
+                        }
+                        Assert.That(slot.pool.ActiveCount, Is.Zero);
+                    }
+                }
+            }
+            yield return null;
+        }
+
         private GameObject Cube(Vector3 position, Vector3 scale)
         {
             GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
