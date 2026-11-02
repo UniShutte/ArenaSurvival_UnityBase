@@ -48,12 +48,8 @@ namespace ArenaSurvival.Combat
         // включения объект получит одно событие дважды.
         private void OnEnable()
         {
-            if (weapon == null)
-            {
+            if (weapon == null) 
                 return;
-            }
-
-            CacheSmokeSystems();
 
             weapon.Fired += OnFired;
             weapon.ReloadStarted += OnReload;
@@ -71,17 +67,12 @@ namespace ArenaSurvival.Combat
                 weapon.Changed -= OnWeaponChanged;
             }
 
-            if (effects == null)
-            {
+            if (effects == null) 
                 return;
-            }
 
             foreach (WeaponEffectSlot view in effects)
-            {
                 ClearParticles(view);
-            }
         }
-
 
         private void LateUpdate()
         {
@@ -93,61 +84,19 @@ namespace ArenaSurvival.Combat
 
         private void OnFired(int index)
         {
-            if (effects == null ||
-                index < 0 ||
-                index >= effects.Length)
-            {
-                return;
-            }
-
             WeaponEffectSlot view = effects[index];
-
-            if (view == null ||
-                view.animator == null ||
-                view.flash == null ||
-                view.audio == null)
-            {
-                return;
-            }
-
-            // Представление реагирует на уже разрешённый выстрел.
             view.animator.SetBool("Aiming", weapon.IsAiming);
             view.animator.SetBool("Reloading", false);
             view.animator.SetTrigger("Fire");
 
-            // false: не останавливаем и не очищаем дочерний дым.
-            view.flash.Stop(
-                false,
-                ParticleSystemStopBehavior.StopEmittingAndClear);
-
+            // Restart the flash without clearing its child smoke.
+            view.flash.Stop(false, ParticleSystemStopBehavior.StopEmittingAndClear);
             view.flash.Play(false);
+            // shortcut: all child systems are smoke; use explicit references for other effects.
+            foreach (ParticleSystem smoke in view.flash.GetComponentsInChildren<ParticleSystem>())
+                if (smoke != view.flash) smoke.Emit(2);
 
-            if (cachedSmokeSystems != null &&
-                index < cachedSmokeSystems.Length)
-            {
-                ParticleSystem[] systems = cachedSmokeSystems[index];
-
-                if (systems != null)
-                {
-                    foreach (ParticleSystem smoke in systems)
-                    {
-                        if (smoke == null ||
-                            smoke == view.flash ||
-                            !smoke.gameObject.activeInHierarchy)
-                        {
-                            continue;
-                        }
-
-                        // Добавляем частицы, не уничтожая предыдущие.
-                        smoke.Emit(2);
-                    }
-                }
-            }
-
-            if (view.shot != null)
-            {
-                view.audio.PlayOneShot(view.shot);
-            }
+            if (view.shot != null) view.audio.PlayOneShot(view.shot);
         }
 
         private void OnReload(int index)
@@ -187,31 +136,17 @@ namespace ArenaSurvival.Combat
 
         private void OnWeaponChanged()
         {
-            if (weapon == null || effects == null)
-            {
+            if (effects == null) 
                 return;
-            }
 
             for (int i = 0; i < effects.Length; i++)
-            {
-                if (i != weapon.CurrentIndex)
-                {
-                    ClearParticles(effects[i]);
-                }
-            }
+                if (i != weapon.CurrentIndex) ClearParticles(effects[i]);
         }
 
         private static void ClearParticles(WeaponEffectSlot view)
         {
-            if (view == null || view.flash == null)
-            {
-                return;
-            }
-
-            // true: при отключении или смене оружия очищаем и вспышку, и дым.
-            view.flash.Stop(
-                true,
-                ParticleSystemStopBehavior.StopEmittingAndClear);
+            if (view != null && view.flash != null)
+                view.flash.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         }
     }
 }
