@@ -1,6 +1,7 @@
 ﻿<Solution>
   <Project Path="ArenaSurvival.Core.csproj" />
   <Project Path="Assembly-CSharp.csproj" />
+  <Project Path="ArenaSurvival.Lab6.csproj" />
   <Project Path="ArenaSurvival.Lab4.csproj" />
   <Project Path="ArenaSurvival.Lab4.Tests.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
