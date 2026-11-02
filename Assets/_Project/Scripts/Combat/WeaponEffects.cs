@@ -28,6 +28,10 @@ namespace ArenaSurvival.Combat
         [SerializeField] private Weapon weapon;              // источник событий
         [SerializeField] private WeaponEffectSlot[] effects; // три элемента, порядок = Slots
 
+        // Ссылки на дочерние системы получаем при включении компонента,
+        // а не создаём новый массив при каждом выстреле.
+        private ParticleSystem[][] cachedSmokeSystems;
+
         private void Awake()
         {
             // Проверяем ссылки до первого выстрела, чтобы ошибка была видна сразу.
@@ -44,17 +48,40 @@ namespace ArenaSurvival.Combat
         // включения объект получит одно событие дважды.
         private void OnEnable()
         {
-            if (weapon == null) return;
+            if (weapon == null)
+            {
+                return;
+            }
+
+            CacheSmokeSystems();
+
             weapon.Fired += OnFired;
             weapon.ReloadStarted += OnReload;
+            weapon.Changed += OnWeaponChanged;
+
+            OnWeaponChanged();
         }
 
         private void OnDisable()
         {
-            if (weapon == null) return;
-            weapon.Fired -= OnFired;
-            weapon.ReloadStarted -= OnReload;
+            if (weapon != null)
+            {
+                weapon.Fired -= OnFired;
+                weapon.ReloadStarted -= OnReload;
+                weapon.Changed -= OnWeaponChanged;
+            }
+
+            if (effects == null)
+            {
+                return;
+            }
+
+            foreach (WeaponEffectSlot view in effects)
+            {
+                ClearParticles(view);
+            }
         }
+
 
         private void LateUpdate()
         {
@@ -66,16 +93,61 @@ namespace ArenaSurvival.Combat
 
         private void OnFired(int index)
         {
-            // index приходит из Weapon: он указывает, какое оружие выстрелило.
+            if (effects == null ||
+                index < 0 ||
+                index >= effects.Length)
+            {
+                return;
+            }
+
             WeaponEffectSlot view = effects[index];
+
+            if (view == null ||
+                view.animator == null ||
+                view.flash == null ||
+                view.audio == null)
+            {
+                return;
+            }
+
+            // Представление реагирует на уже разрешённый выстрел.
             view.animator.SetBool("Aiming", weapon.IsAiming);
             view.animator.SetBool("Reloading", false);
             view.animator.SetTrigger("Fire");
-            // Stop со StopEmittingAndClear гасит прежнюю вспышку, чтобы частицы
-            // не накапливались при высокой скорострельности.
-            view.flash.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
-            view.flash.Play(true); // Play(true) включает систему вместе с дочерними
-            if (view.shot != null) view.audio.PlayOneShot(view.shot);
+
+            // false: не останавливаем и не очищаем дочерний дым.
+            view.flash.Stop(
+                false,
+                ParticleSystemStopBehavior.StopEmittingAndClear);
+
+            view.flash.Play(false);
+
+            if (cachedSmokeSystems != null &&
+                index < cachedSmokeSystems.Length)
+            {
+                ParticleSystem[] systems = cachedSmokeSystems[index];
+
+                if (systems != null)
+                {
+                    foreach (ParticleSystem smoke in systems)
+                    {
+                        if (smoke == null ||
+                            smoke == view.flash ||
+                            !smoke.gameObject.activeInHierarchy)
+                        {
+                            continue;
+                        }
+
+                        // Добавляем частицы, не уничтожая предыдущие.
+                        smoke.Emit(2);
+                    }
+                }
+            }
+
+            if (view.shot != null)
+            {
+                view.audio.PlayOneShot(view.shot);
+            }
         }
 
         private void OnReload(int index)
@@ -85,6 +157,61 @@ namespace ArenaSurvival.Combat
             view.animator.ResetTrigger("Fire");
             view.animator.SetBool("Reloading", true);
             if (view.reload != null) view.audio.PlayOneShot(view.reload);
+        }
+
+        private void CacheSmokeSystems()
+        {
+            if (effects == null)
+            {
+                cachedSmokeSystems = null;
+                return;
+            }
+
+            cachedSmokeSystems = new ParticleSystem[effects.Length][];
+
+            for (int i = 0; i < effects.Length; i++)
+            {
+                WeaponEffectSlot view = effects[i];
+
+                if (view == null || view.flash == null)
+                {
+                    continue;
+                }
+
+                // true включает неактивные View других оружий.
+                // Саму вспышку исключаем при обработке OnFired.
+                cachedSmokeSystems[i] =
+                    view.flash.GetComponentsInChildren<ParticleSystem>(true);
+            }
+        }
+
+        private void OnWeaponChanged()
+        {
+            if (weapon == null || effects == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < effects.Length; i++)
+            {
+                if (i != weapon.CurrentIndex)
+                {
+                    ClearParticles(effects[i]);
+                }
+            }
+        }
+
+        private static void ClearParticles(WeaponEffectSlot view)
+        {
+            if (view == null || view.flash == null)
+            {
+                return;
+            }
+
+            // true: при отключении или смене оружия очищаем и вспышку, и дым.
+            view.flash.Stop(
+                true,
+                ParticleSystemStopBehavior.StopEmittingAndClear);
         }
     }
 }
