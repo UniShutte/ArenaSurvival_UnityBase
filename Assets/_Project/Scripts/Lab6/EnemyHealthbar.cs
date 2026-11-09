@@ -4,26 +4,40 @@ using UnityEngine.UI;
 
 namespace ArenaSurvival.Lab6
 {
+    /// <summary>Places a non-interactive world-space bar above a rolling enemy.</summary>
     public sealed class EnemyHealthBar : MonoBehaviour
     {
         [SerializeField] private Health health;
         [SerializeField] private Slider slider;
         private Camera viewCamera;
+
         private void Awake()
         {
             if (health == null || slider == null)
-            { Debug.LogError("Assign Health and Slider.", this); enabled = false; }
+            {
+                Debug.LogError("EnemyHealthBar: assign Health and Slider.", this);
+                enabled = false;
+            }
         }
+
         private void OnEnable()
         {
-            if (health == null || slider == null) return;
+            viewCamera = Camera.main;
             health.HealthChanged += Refresh;
             Refresh(health.CurrentHealth, health.MaximumHealth);
         }
-        private void Start() { viewCamera = Camera.main; Refresh(health.CurrentHealth, health.MaximumHealth); }
-        private void OnDisable() { if (health != null) health.HealthChanged -= Refresh; }
+
+        private void OnDisable()
+        {
+            if (health != null) health.HealthChanged -= Refresh;
+        }
+
         private void Refresh(int current, int maximum)
-        { slider.maxValue = maximum; slider.value = current; }
+        {
+            slider.maxValue = maximum;
+            slider.value = current;
+        }
+
         private void LateUpdate()
         {
             if (viewCamera == null) return;
