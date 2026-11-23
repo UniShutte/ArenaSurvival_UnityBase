@@ -194,6 +194,149 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 61136471}
   m_CullTransparentMesh: 1
+--- !u!1 &203240032
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 203240035}
+  - component: {fileID: 203240034}
+  - component: {fileID: 203240033}
+  m_Layer: 0
+  m_Name: UiAudio
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &203240033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 203240032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b836446164f044747aca4a7f519a52db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ArenaSurvival.Lab6::ArenaSurvival.Lab6.UiClickAudio
+  click: {fileID: 8300000, guid: ee40f9118f829bc41bb22f65710d230d, type: 3}
+--- !u!82 &203240034
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 203240032}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: -9213978201006858775, guid: 0cbfaed908676144fb9bae6589154339, type: 2}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 0.3
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!4 &203240035
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 203240032}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1602.6245, y: -0.00001, z: 5793.6426}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &248464221
 GameObject:
   m_ObjectHideFlags: 0
@@ -1089,7 +1232,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: "\u0441\u0442\u0430\u0442\u0443\u0441"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1116,7 +1259,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 10
+  m_fontSize: 44.75
   m_fontSizeBase: 10
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1251,7 +1394,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 880832160}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 203240033}
+        m_TargetAssemblyTypeName: ArenaSurvival.Lab6.UiClickAudio, ArenaSurvival.Lab6
+        m_MethodName: PlayClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &880832160
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1922,6 +2077,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1548143897}
   - component: {fileID: 1548143896}
+  - component: {fileID: 1548143898}
   m_Layer: 0
   m_Name: MenuController
   m_TagString: Untagged
@@ -1962,6 +2118,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1548143898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1548143895}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44ac79b4485134c47b52a6f1f55d0a19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ArenaSurvival.Lab6::ArenaSurvival.Lab6.MainMenuController
+  catalog: {fileID: 11400000, guid: c09bf4238f584a446ab436b6a8906bdc, type: 2}
+  levels: {fileID: 555455188}
+  play: {fileID: 1599283323}
+  settingsButton: {fileID: 1677427376}
+  status: {fileID: 770524333}
+  mainPanel: {fileID: 690628577}
+  settings: {fileID: 1949432392}
+  navigator: {fileID: 1548143896}
 --- !u!1 &1599283321
 GameObject:
   m_ObjectHideFlags: 0
@@ -2044,7 +2220,31 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1599283324}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 203240033}
+        m_TargetAssemblyTypeName: ArenaSurvival.Lab6.UiClickAudio, ArenaSurvival.Lab6
+        m_MethodName: PlayClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1548143898}
+        m_TargetAssemblyTypeName: ArenaSurvival.Lab6.MainMenuController, ArenaSurvival.Lab6
+        m_MethodName: PlaySelected
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1599283324
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2302,7 +2502,31 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1677427377}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 203240033}
+        m_TargetAssemblyTypeName: ArenaSurvival.Lab6.UiClickAudio, ArenaSurvival.Lab6
+        m_MethodName: PlayClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1548143898}
+        m_TargetAssemblyTypeName: ArenaSurvival.Lab6.MainMenuController, ArenaSurvival.Lab6
+        m_MethodName: OpenSettings
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1677427377
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2880,6 +3104,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6864828033221355654, guid: 8070137b0ea252f4ab60b8345948e660, type: 3}
   m_PrefabInstance: {fileID: 8389671044850855338}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1949432392 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4003232903827357834, guid: 8070137b0ea252f4ab60b8345948e660, type: 3}
+  m_PrefabInstance: {fileID: 8389671044850855338}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0fac859d9181b64f882495b0e50d88d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ArenaSurvival.Lab6::ArenaSurvival.Lab6.SettingsPanel
 --- !u!1 &2105145256
 GameObject:
   m_ObjectHideFlags: 0
@@ -3181,3 +3416,4 @@ SceneRoots:
   - {fileID: 655818312}
   - {fileID: 1175298030}
   - {fileID: 1548143897}
+  - {fileID: 203240035}

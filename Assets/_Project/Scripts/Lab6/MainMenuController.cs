@@ -25,8 +25,14 @@ namespace ArenaSurvival.Lab6
             AudioListener.pause = false;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            if (levels == null || play == null || settingsButton == null || status == null ||
-                mainPanel == null || settings == null || navigator == null)
+
+            if (levels == null 
+                || play == null 
+                || settingsButton == null 
+                || status == null 
+                || mainPanel == null 
+                || settings == null 
+                || navigator == null)
             {
                 Debug.LogError("MainMenuController: assign all scene references.", this);
                 enabled = false;
@@ -47,9 +53,12 @@ namespace ArenaSurvival.Lab6
                 settingsButton.Select();
                 return;
             }
+
             var names = new List<string>();
+
             foreach (LevelEntry entry in catalog.levels)
                 names.Add(entry == null ? "Invalid level" : entry.title);
+
             levels.AddOptions(names);
             status.text = "";
             play.Select();
@@ -59,8 +68,11 @@ namespace ArenaSurvival.Lab6
         {
             if (!isActiveAndEnabled || navigator.IsLoading || catalog == null || catalog.levels == null ||
                 levels.value < 0 || levels.value >= catalog.levels.Length) return;
+
             LevelEntry entry = catalog.levels[levels.value];
+
             if (entry == null) { status.text = "Invalid level entry"; return; }
+
             if (navigator.LoadLevel(entry.scenePath)) levels.interactable = false;
             else status.text = navigator.Error;
         }
@@ -68,6 +80,7 @@ namespace ArenaSurvival.Lab6
         public void OpenSettings()
         {
             if (!settings.IsReady || navigator.IsLoading) return;
+
             mainPanel.SetActive(false);
             settings.Open();
         }
@@ -75,6 +88,7 @@ namespace ArenaSurvival.Lab6
         private void OnSettingsClosed()
         {
             mainPanel.SetActive(true);
+
             if (EventSystem.current != null) EventSystem.current.SetSelectedGameObject(null);
             settingsButton.Select();
         }

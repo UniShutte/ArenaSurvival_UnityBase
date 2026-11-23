@@ -145,7 +145,7 @@ AudioMixerController:
   - guid: 96489098790a82d45a02526d5120fcb6
     name: MasterVolume
   - guid: 05017df4c009f6e47b7dcd535f230a28
-    name: MyExposedParam
+    name: UIVolume
   - guid: 43b337dc1476973459fc9b2e4c08b310
     name: WeaponsVolume
   m_AudioMixerGroupViews:

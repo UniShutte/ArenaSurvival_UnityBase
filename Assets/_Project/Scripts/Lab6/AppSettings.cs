@@ -13,6 +13,7 @@ namespace ArenaSurvival.Lab6
             "MasterVolume", "WeaponsVolume", "ImpactsVolume",
             "FootstepsVolume", "AmbienceVolume", "UIVolume"
         };
+
         private static readonly float[] Defaults = { 0.8f, 0.7f, 0.6f, 0.5f, 0.35f, 0.6f };
         [SerializeField] private AudioMixer mixer;
         private readonly float[] volumes = new float[6];
